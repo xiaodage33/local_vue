@@ -2,7 +2,7 @@
 
 
     <div>
-   <el-button type="danger" @click="submitForm"> 点击 </el-button>
+   <el-button type="danger" @click="getinfo()"> 点击 </el-button>
     </div>
 
 
@@ -16,15 +16,22 @@
 //, { refs, root }
     export default {
         name: "Login",
-    setup(props,{root}) {
+    setup(props) {
 
+        //点击后返回值,使用函数表达式写
+        const getinfo=(()=>{
+            // alert(222) //return后测试能否弹窗
+           Getinfo() //在这里触发点击
 
-
-
-        onMounted(()=>{
-            Getinfo()
         })
 
+       //点击提交
+        onMounted(()=>{
+            // Getinfo()
+        })
+        return{
+            getinfo
+        }
     }
     }
 
