@@ -11,6 +11,11 @@ Vue.use(VueRouter)
     component: Home
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login/login.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
