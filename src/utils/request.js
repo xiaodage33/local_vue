@@ -50,17 +50,17 @@ service.interceptors.response.use(function (response) {
     return Promise.reject(error);
 });
 
-
-//测试
-service.request({
-    method: 'get',
-    url:'/__api__/index',
-    data:{
-        firstName:'fred',
-        lastName:'finstone'
-    }
-
-})
+//
+// //测试
+// service.request({
+//     method: 'get',
+//     url:'/__api__/index',
+//     data:{
+//         firstName:'fred',
+//         lastName:'finstone'
+//     }
+//
+// })
 
 
 export default service;
