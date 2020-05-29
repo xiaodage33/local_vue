@@ -23,6 +23,7 @@ service.interceptors.request.use(function (config) {
     // 最终目地不是在请求头添加参数
     config.headers['Tokey'] = 111;
     config.headers['UserName'] = 222;
+    console.log('呵呵',config.headers.get)
     return config;
 }, function (error) {
 // 对请求错误做些什么

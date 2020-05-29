@@ -1,36 +1,45 @@
 <template>
-
-
     <div>
-   <el-button type="danger" @click="getinfo()"> 点击 </el-button>
+<el-input v-model="ruleForm.username" id="username" placeholder="输入username"></el-input>
+   <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
+           <el-button type="danger" @click="getinfo()"> 查询 </el-button>
     </div>
-
-
 </template>
-
 <script>
     // import service from '../../utils/request'  //测试的
     import axios from 'axios'
-    import {Getinfo} from '../../api/getinfo'
+    import {Getinfo,Getinfo1} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
 //, { refs, root }
     export default {
         name: "Login",
     setup(props) {
 
-        //点击后返回值,使用函数表达式写
-        const getinfo=(()=>{
-            // alert(222) //return后测试能否弹窗
-           Getinfo() //在这里触发点击
-
+        const ruleForm=reactive({
+            username:''
         })
+        //点击后返回值,使用函数表达式写
 
+        const getinfo=(()=>{
+            Getinfo()
+        })
+        const Sousuo=(()=>{
+            // let data={
+            //     username:ruleForm.username
+            // }
+            Getinfo1({username:ruleForm.username})
+            console.log((ruleForm.username))
+        })
+        console.log(ruleForm.username)
        //点击提交
         onMounted(()=>{
             // Getinfo()
         })
         return{
-            getinfo
+            getinfo,
+            ruleForm,
+            Sousuo
+
         }
     }
     }
