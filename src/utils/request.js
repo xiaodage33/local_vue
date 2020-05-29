@@ -1,4 +1,6 @@
 import axios from "axios"
+import { Message } from "element-ui";
+
 
 
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '__api__';
@@ -23,7 +25,6 @@ service.interceptors.request.use(function (config) {
     // 最终目地不是在请求头添加参数
     config.headers['Tokey'] = 111;
     config.headers['UserName'] = 222;
-    console.log('呵呵',config.data.username)
     return config;
 }, function (error) {
 // 对请求错误做些什么
@@ -35,16 +36,16 @@ service.interceptors.request.use(function (config) {
  */
 service.interceptors.response.use(function (response) {
     // 对响应数据做点什么
-    // let data = response.data
-    // // 业务需求
-    //
-    // if(data.resCode !== 0) {
-    //     Message.error(data.message);
-    //     return Promise.reject(data);
-    // }else{
-    //     return response;
-    //     // return Promise.resolve(data);
-    // }
+    const data = response.data
+    // // // 业务需求
+    console.log('打印response：',response.data)
+    if(data.stu_name == 0) {
+        Message.error(data.stu_name);
+        return Promise.reject(data);
+    }else{
+        return response;
+        // return Promise.resolve(data);
+    }
 
 }, function (error) {
     // 对响应错误做点什么

@@ -13,7 +13,7 @@
 //, { refs, root }
     export default {
         name: "Login",
-    setup(props) {
+    setup(props,{root}) {
 
         const ruleForm=reactive({
             username:''
@@ -23,14 +23,24 @@
         const getinfo=(()=>{
             Getinfo()
         })
+
+
         const Sousuo=(()=>{
-            // let data={
-            //     username:ruleForm.username
-            // }
-            Getinfo1({username:ruleForm.username})
-            console.log((ruleForm.username))
+            if(ruleForm.username == '')
+                root.$message.error('输入内容不能为空')
+                Getinfo1({username:ruleForm.username}).then(response => {
+                  console.log("哈哈：==",response.data.stu_name)
+                  const data = response;
+                  root.$message({
+                      message: {"返回值":data.data.stu_name},
+                      type:'success'
+                  });
+                }).catch(error => {
+                  console.log(error);
+                })
         })
-        console.log(ruleForm.username)
+
+
        //点击提交
         onMounted(()=>{
             // Getinfo()
@@ -40,9 +50,9 @@
             ruleForm,
             Sousuo
 
-        }
-    }
-    }
+
+
+    }}}
 
 </script>
 
