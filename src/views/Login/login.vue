@@ -32,7 +32,7 @@
                   console.log("哈哈：==",response.data.stu_name)
                   const data = response;
                   root.$message({
-                      message: {"返回值":data.data.stu_name},
+                      message: {"返回值":data.data.stu_name,"id":data.data.id},
                       type:'success'
                   });
                 }).catch(error => {
