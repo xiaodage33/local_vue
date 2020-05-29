@@ -6,7 +6,6 @@ export function Getinfo(data){
         method:"get",
         url:"/__api__/index",
         data,
-
     })
 
 }
@@ -16,8 +15,6 @@ export function Getinfo1(data){
         method:"post",
         url:"/__api__/getinfo",
         data,
-
     })
-
 }
 
