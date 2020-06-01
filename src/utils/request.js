@@ -35,10 +35,11 @@ service.interceptors.request.use(function (config) {
  * 请求接口后，返回数据进行拦截（响应拦截器）
  */
 service.interceptors.response.use(function (response) {
+    console.log('res', response);
     // 对响应数据做点什么
     const data = response.data
     // // // 业务需求
-    console.log('打印response：',response.data)
+    console.log('打印response：',typeof data)
     if(data.stu_name == 0) {
         Message.error(data.stu_name);
         return Promise.reject(data);

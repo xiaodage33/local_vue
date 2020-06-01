@@ -5,11 +5,13 @@
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
 
 
-       <div class="tableData" v-for="firstItem in tableData.item" :key="firstItem.id">
-           <h1> {{ firstItem.stu_name }}   </h1>
-       </div>
+       <!--<div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">-->
+           <!--&lt;!&ndash;<h1> {{ firstItem.stu_name }}  = {{ firstItem.stu_sex}} ={{firstItem.stu_cls_id}} </h1>&ndash;&gt;-->
+           <!--<h1> {{firstItem }} </h1>-->
+           <!--<h2>{{firstItem.stu_name}} </h2>-->
 
-
+           <!--<h3>{{ tableData.item}}  </h3>-->
+       <!--</div>-->
 
      <el-table
       :data="tableData.item"
@@ -50,32 +52,31 @@
         })
         const tableData= reactive({
                      item:[
-                         {  id: '1',
-                        stu_name : '王小虎',
-                         stu_sex: '上海市普陀区金沙江路 1518 弄',
-                         stu_cls_id: '男'
-                     }, {
-                         id: '2',
-                         stu_name: '王小虎',
-                         stu_sex: '上海市普陀区金沙江路 1517 弄',
-                         stu_cls_id: '男'
-
-                     }, {
-                         id: '3',
-                         stu_name: '王小虎',
-                         stu_sex: '上海市普陀区金沙江路 1519 弄',
-                        stu_cls_id: '男'
-                     }
+                     //     {  id: '1',
+                     //    stu_name : '王小虎',
+                     //     stu_sex: '上海市普陀区金沙江路 1518 弄',
+                     //     stu_cls_id: '男'
+                     // }, {
+                     //     id: '2',
+                     //     stu_name: '王小虎',
+                     //     stu_sex: '上海市普陀区金沙江路 1517 弄',
+                     //     stu_cls_id: '男'
+                     //
+                     // }, {
+                     //     id: '3',
+                     //     stu_name: '王小虎',
+                     //     stu_sex: '上海市普陀区金沙江路 1519 弄',
+                     //    stu_cls_id: '男'
+                     // }
                      ]})
         //点击后返回值,使用函数表达式写
         const getinfo=(()=>{
-            Getinfo({}).then(response=>{
-                let data = response.data
-                console.log("前端===",data)
-                tableData.item = data
-                alert(tableData.item)
+            Getinfo({}).then((response = {})=>{
+                let data = response.data;
+                console.log("前端===", data.data)
+                // tableData.item = data
+                tableData.item = data.data;
             }).catch(error =>{
-
             })
         })
         const Sousuo=(()=>{
@@ -98,12 +99,11 @@
             // Getinfo()
         })
         return{
-            getinfo,
             ruleForm,
             Sousuo,
-            tableData
+            tableData,
+            getinfo
     }}}
-
 </script>
 
 <style scoped>
