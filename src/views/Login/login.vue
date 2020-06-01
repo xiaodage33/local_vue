@@ -5,13 +5,8 @@
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
 
 
-       <!--<div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">-->
-           <!--&lt;!&ndash;<h1> {{ firstItem.stu_name }}  = {{ firstItem.stu_sex}} ={{firstItem.stu_cls_id}} </h1>&ndash;&gt;-->
-           <!--<h1> {{firstItem }} </h1>-->
-           <!--<h2>{{firstItem.stu_name}} </h2>-->
-
-           <!--<h3>{{ tableData.item}}  </h3>-->
-       <!--</div>-->
+       <div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">
+       </div>
 
      <el-table
       :data="tableData.item"
@@ -75,7 +70,6 @@
             Getinfo({}).then((response = {})=>{
                 let data = response.data;
                 console.log("前端===", data.data)
-                // tableData.item = data
                 tableData.item = data.data;
             }).catch(error =>{
             })
@@ -83,10 +77,12 @@
         const Sousuo=(()=>{
             if(ruleForm.username == '')
                 root.$message.error('输入内容不能为空')
-                Getinfo1({username:ruleForm.username}).then(response => {
+                Getinfo1({username:ruleForm.username}).then((response ={} )=> {
                   console.log("哈哈：==",response.data.stu_name)
                   const data = response;
-                  const tableData = data
+                  console.log("lele",data.data)
+                  tableData.item=[data.data]
+
                   root.$message({
                       message: {"返回值" :data.data.stu_name,"id" :data.data.id},
                       type:'success'
