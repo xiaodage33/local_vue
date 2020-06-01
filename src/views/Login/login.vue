@@ -4,6 +4,13 @@
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
 
+
+       <div class="tableData" v-for="firstItem in tableData.item" :key="firstItem.id">
+           <h1> {{ firstItem.stu_name }}   </h1>
+       </div>
+
+
+
      <el-table
       :data="tableData.item"
       style="width: 100%">
@@ -37,15 +44,10 @@
 //, { refs, root }
     export default {
         name: "Login",
-
-
     setup(props,{root}) {
-
         const ruleForm=reactive({
-            username:''
+            username:'',
         })
-
-
         const tableData= reactive({
                      item:[
                          {  id: '1',
@@ -63,11 +65,8 @@
                          stu_name: '王小虎',
                          stu_sex: '上海市普陀区金沙江路 1519 弄',
                         stu_cls_id: '男'
-
                      }
                      ]})
-
-
         //点击后返回值,使用函数表达式写
         const getinfo=(()=>{
             Getinfo({}).then(response=>{
@@ -75,20 +74,17 @@
                 console.log("前端===",data)
                 tableData.item = data
                 alert(tableData.item)
-
             }).catch(error =>{
 
             })
         })
-
-
-
         const Sousuo=(()=>{
             if(ruleForm.username == '')
                 root.$message.error('输入内容不能为空')
                 Getinfo1({username:ruleForm.username}).then(response => {
                   console.log("哈哈：==",response.data.stu_name)
                   const data = response;
+                  const tableData = data
                   root.$message({
                       message: {"返回值":data.data.stu_name,"id":data.data.id},
                       type:'success'
