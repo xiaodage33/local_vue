@@ -18,3 +18,12 @@ export function Getinfo1(data){
     })
 }
 
+//添加一条数据
+
+export function addinfo(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/add",
+        data,
+    })
+}

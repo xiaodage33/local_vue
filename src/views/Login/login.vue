@@ -2,8 +2,7 @@
     <div>
 <el-input v-model="ruleForm.username" id="username" placeholder="输入username"></el-input>
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
-           <el-button type="danger" @click="getinfo()"> 查询 </el-button>
-
+        <el-button type="danger" @click="getinfo()"> 查询 </el-button>
 
      <el-table
       :data="tableData"
@@ -22,6 +21,10 @@
         prop="address"
         label="地址">
       </el-table-column>
+        <el-table-column
+        prop="sex"
+        label="性别">
+      </el-table-column>
     </el-table>
 
     </div>
@@ -29,7 +32,7 @@
 <script>
     // import service from '../../utils/request'  //测试的
     import axios from 'axios'
-    import {Getinfo,Getinfo1} from '../../api/getinfo'
+    import {Getinfo,Getinfo1,addinfo} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
 //, { refs, root }
     export default {
@@ -39,19 +42,26 @@
                      tableData: [{
                          date: '2016-05-02',
                          name: '王小虎',
-                         address: '上海市普陀区金沙江路 1518 弄'
+                         address: '上海市普陀区金沙江路 1518 弄',
+                         sex: '男'
                      }, {
                          date: '2016-05-04',
                          name: '王小虎',
-                         address: '上海市普陀区金沙江路 1517 弄'
+                         address: '上海市普陀区金沙江路 1517 弄',
+                         sex: '男'
+
                      }, {
                          date: '2016-05-01',
                          name: '王小虎',
-                         address: '上海市普陀区金沙江路 1519 弄'
+                         address: '上海市普陀区金沙江路 1519 弄',
+                        sex: '男'
+
                      }, {
                          date: '2016-05-03',
                          name: '王小虎',
-                         address: '上海市普陀区金沙江路 1516 弄'
+                         address: '上海市普陀区金沙江路 1516 弄',
+                         sex: '女'
+
                      }]
                  }
              },
