@@ -26,7 +26,7 @@
     import {reactive} from "@vue/composition-api";
     export default {
         name: "Add",
-        setup(props){
+        setup(props,{root}){
 
             const form=reactive({
                 stu_name:'',
@@ -44,6 +44,10 @@
                 }
                 addinfo(data).then(response=>{
                     console.log(response)
+                    root.$message({
+                        message:"填加成功 ："+form.stu_name,
+                        type: "success"
+                    })
                 }).cache(error=>{
 
                 })

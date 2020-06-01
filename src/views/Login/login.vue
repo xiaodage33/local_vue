@@ -37,9 +37,16 @@
 //, { refs, root }
     export default {
         name: "Login",
-              data() {
-                 return {
-                     tableData: [{
+
+
+    setup(props,{root}) {
+
+        const ruleForm=reactive({
+            username:''
+        })
+
+
+        const tableData= reactive([{
                          date: '2016-05-02',
                          name: '王小虎',
                          address: '上海市普陀区金沙江路 1518 弄',
@@ -62,15 +69,9 @@
                          address: '上海市普陀区金沙江路 1516 弄',
                          sex: '女'
 
-                     }]
-                 }
-             },
+                     }])
 
-    setup(props,{root}) {
 
-        const ruleForm=reactive({
-            username:''
-        })
         //点击后返回值,使用函数表达式写
         const getinfo=(()=>{
             Getinfo()
@@ -96,7 +97,8 @@
         return{
             getinfo,
             ruleForm,
-            Sousuo
+            Sousuo,
+            tableData
     }}}
 
 </script>
