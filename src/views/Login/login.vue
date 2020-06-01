@@ -18,7 +18,7 @@
       style="width: 100%">
       <el-table-column
         prop="id"
-        label="日期"
+        label="id"
         width="180">
       </el-table-column>
       <el-table-column
@@ -28,12 +28,13 @@
       </el-table-column>
       <el-table-column
         prop="stu_cls_id"
-        label="地址">
+        label="班级">
       </el-table-column>
-        <el-table-column
-        prop="stu_sex"
-        label="性别">
-      </el-table-column>
+       <el-table-column  prop="stu_sex"
+        label="性别" >  </el-table-column>
+
+
+
     </el-table>
 
     </div>
@@ -87,7 +88,7 @@
                   const data = response;
                   const tableData = data
                   root.$message({
-                      message: {"返回值":data.data.stu_name,"id":data.data.id},
+                      message: {"返回值" :data.data.stu_name,"id" :data.data.id},
                       type:'success'
                   });
                 }).catch(error => {
