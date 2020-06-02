@@ -29,7 +29,7 @@
          <el-table-column
             label="操作" >
                 <template slot-scope="scope">
-                    <el-button type="danger" size="mini" @click='del_info(scope.row.id)'>删除</el-button>
+                    <el-button type="danger" size="mini" @click='del_message(scope.row.id)'>删除</el-button>
                     <el-button type="success" size="mini" @click=edit_info()>编辑</el-button>
                 </template>
 
@@ -94,23 +94,48 @@
                   console.log(error);
                 })
         })
-
         const del_info=((id)=>{
-            alert(id)
+            message_box()
             delinfo({id:id}).then(response=>{
-                console.log(response)
-                alert(id)
-
+                console.log("前端删除返回response",response)
             }).cache(error=>{
-
             })
-
         })
+
+        const del_message=((id)=>{
+            let data =id
+            root.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+
+            }).then(() => {
+                delinfo({id:data}).then(response=>{
+                console.log("前端删除返回response",response)
+            },
+            root.$message({
+                type: 'success',
+                message: '删除成功!'
+
+              })  )
+            }).catch(() => {
+              root.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+      })
+
+
 
         const edit_info=(()=>{
             alert(222)
 
         })
+
+
+
+
        //点击提交
         onMounted(()=>{
             // Getinfo()
@@ -121,7 +146,8 @@
             tableData,
             getinfo,
             del_info,
-            edit_info
+            edit_info,
+            del_message
     }}}
 </script>
 <style scoped>
