@@ -27,3 +27,11 @@ export function addinfo(data){
         data,
     })
 }
+//del删除
+export function delinfo(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/del",
+        data,
+    })
+}

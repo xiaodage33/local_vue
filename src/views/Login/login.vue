@@ -4,6 +4,7 @@
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
        <div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">
+
        </div>
      <el-table
       :data="tableData.item"
@@ -23,14 +24,20 @@
         label="班级">
       </el-table-column>
        <el-table-column  prop="stu_sex"
-        label="性别" >  </el-table-column>
+        label="性别" >
+       </el-table-column>
+
+        <el-table-column>
+                <el-button type="danger" size="mini" @click='del_info()'>删除</el-button>
+                <el-button type="success" size="mini" @click=edit_info()>编辑</el-button>
+        </el-table-column>
     </el-table>
     </div>
 </template>
 <script>
     // import service from '../../utils/request'  //测试的
     import axios from 'axios'
-    import {Getinfo,Getinfo1,addinfo} from '../../api/getinfo'
+    import {Getinfo,Getinfo1,addinfo,delinfo} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
 //, { refs, root }
     export default {
@@ -84,6 +91,23 @@
                   console.log(error);
                 })
         })
+
+        const del_info=((id)=>{
+            alert(id)
+            delinfo({id:id}).then(response=>{
+                console.log(response)
+                alert(id)
+
+            }).cache(error=>{
+
+            })
+
+        })
+
+        const edit_info=(()=>{
+            alert(222)
+
+        })
        //点击提交
         onMounted(()=>{
             // Getinfo()
@@ -92,7 +116,9 @@
             ruleForm,
             Sousuo,
             tableData,
-            getinfo
+            getinfo,
+            del_info,
+            edit_info
     }}}
 </script>
 <style scoped>
