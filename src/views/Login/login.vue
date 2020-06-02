@@ -1,13 +1,10 @@
 <template>
     <div>
-<el-input v-model="ruleForm.username" id="username" placeholder="输入username"></el-input>
+<el-input v-model="ruleForm.username" id="username" placeholder="输入username" ></el-input>
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
-
-
        <div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">
        </div>
-
      <el-table
       :data="tableData.item"
       style="width: 100%">
@@ -27,11 +24,7 @@
       </el-table-column>
        <el-table-column  prop="stu_sex"
         label="性别" >  </el-table-column>
-
-
-
     </el-table>
-
     </div>
 </template>
 <script>
@@ -102,7 +95,5 @@
             getinfo
     }}}
 </script>
-
 <style scoped>
-
 </style>

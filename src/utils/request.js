@@ -1,15 +1,10 @@
 import axios from "axios"
 import { Message } from "element-ui";
 
-
-
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '__api__';
-
-
 const service = axios.create({
     // baseURL:'http://127.0.0.1:9999/vv/',
     // baseURL:BASEURL,
-
     timeout:1500,
 })
 /**
@@ -39,7 +34,7 @@ service.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     const data = response.data
     // // // 业务需求
-    console.log('打印response：',typeof data)
+    console.log('拦截器位置-打印response：',typeof data)
     if(data.stu_name == 0) {
         Message.error(data.stu_name);
         return Promise.reject(data);
@@ -47,12 +42,10 @@ service.interceptors.response.use(function (response) {
         return response;
         // return Promise.resolve(data);
     }
-
 }, function (error) {
     // 对响应错误做点什么
     return Promise.reject(error);
 });
-
 //
 // //测试
 // service.request({
@@ -64,10 +57,7 @@ service.interceptors.response.use(function (response) {
 //     }
 //
 // })
-
-
 export default service;
-
 /**
  * 使用export default时，但不能同时存在多个default。
  * 文件 import 不需要花括号，

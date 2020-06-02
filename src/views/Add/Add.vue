@@ -16,26 +16,19 @@
     <el-button>取消</el-button>
   </el-form-item>
 </el-form>
-
-
     </div>
 </template>
-
 <script>
     import {addinfo} from "../../api/getinfo";
     import {reactive} from "@vue/composition-api";
     export default {
         name: "Add",
         setup(props,{root}){
-
             const form=reactive({
                 stu_name:'',
                 stu_sex:'',
                 stu_cls_id:''
-
             })
-
-
             const submit =()=>{
                 let data={
                     stu_name:form.stu_name,
@@ -49,19 +42,13 @@
                         type: "success"
                     })
                 }).cache(error=>{
-
                 })
-
             }
             return{
                 form,
                 submit
             }
-
-
         }
-
-
     //       data() {
     //
     //   return {
@@ -84,7 +71,5 @@
     // }
     }
 </script>
-
 <style scoped>
-
 </style>
