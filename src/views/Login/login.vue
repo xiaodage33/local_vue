@@ -7,7 +7,7 @@
 
        </div>
      <el-table
-      :data="tableData.item"
+        :data="tableData.item"
       style="width: 100%">
       <el-table-column
         prop="id"
@@ -26,12 +26,15 @@
        <el-table-column  prop="stu_sex"
         label="性别" >
        </el-table-column>
+         <el-table-column
+            label="操作" >
+                <template slot-scope="scope">
+                    <el-button type="danger" size="mini" @click='del_info(scope.row.id)'>删除</el-button>
+                    <el-button type="success" size="mini" @click=edit_info()>编辑</el-button>
+                </template>
 
-        <el-table-column>
-                <el-button type="danger" size="mini" @click='del_info()'>删除</el-button>
-                <el-button type="success" size="mini" @click=edit_info()>编辑</el-button>
-        </el-table-column>
-    </el-table>
+                 </el-table-column>
+     </el-table>
     </div>
 </template>
 <script>
