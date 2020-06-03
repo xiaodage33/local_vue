@@ -9,6 +9,7 @@
       style="width: 100%">
          <el-table-column
             type="index"
+            label="当前页编码"
             width="180"/>
       <el-table-column
         prop="id"
@@ -39,10 +40,10 @@
 
         <!--底部分页-->
         <el-row>
-            <el-col :span="12">
-                <el-button size="medium" @click="deleteAll">批量删除</el-button>
-            </el-col>
-            <el-col :span="12">
+            <!--<el-col :span="12">-->
+                <!--<el-button size="medium" @click="deleteAll">批量删除</el-button>-->
+            <!--</el-col>-->
+            <el-col :span="16">
                 <el-pagination
                     class="pull-right"
                     background
