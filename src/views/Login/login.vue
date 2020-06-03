@@ -119,7 +119,6 @@
         const handleCurrentChange = (val)=>{
             page.pageNumber=val;
             handleTableChange();
-            console.log(888)
             getinfo()
         }
 
@@ -130,7 +129,7 @@
         //     }
         // }
      //获取所有； 点击后返回值,使用函数表达式写
-        const getinfo= async ()=>{
+        const getinfo= async ()=>{    //async async 表示函数里有异步操作
             let resquestData = {
                 pageNumber: page.pageNumber,
                 pageSize: page.pageSize
