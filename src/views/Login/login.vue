@@ -30,44 +30,49 @@
             label="操作" >
                 <template slot-scope="scope">
                     <el-button type="danger" size="mini" @click='del_message(scope.row.id)'>删除</el-button>
-                    <el-button type="success" size="mini" @click=edit_info()>编辑</el-button>
+                    <el-button type="success" size="mini" :id="infoId" @click=editInfo(scope.row.id)>编辑</el-button>
                 </template>
 
                  </el-table-column>
      </el-table>
+
+
+        <DialogEditInfo :flag.sync="dialog_info_edit" :id="infoId"   @getListEmit="getList" />
+
+//:category="options.category"
+
     </div>
 </template>
 <script>
     // import service from '../../utils/request'  //测试的
     import axios from 'axios'
-    import {Getinfo,Getinfo1,addinfo,delinfo} from '../../api/getinfo'
+    import {Getinfo,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
+    import DialogEditInfo from "./edit.vue";
+
+
 //, { refs, root }
     export default {
         name: "Login",
+        components: {  DialogEditInfo },
+
+            props: {
+        flag: {
+            type: Boolean,
+            default: false
+        }
+            },
+
     setup(props,{root}) {
         const ruleForm=reactive({
             username:'',
         })
+
+        const infoId = ref("");
+        const dialog_info_edit = ref(false);
         const tableData= reactive({
-                     item:[
-                     //     {  id: '1',
-                     //    stu_name : '王小虎',
-                     //     stu_sex: '上海市普陀区金沙江路 1518 弄',
-                     //     stu_cls_id: '男'
-                     // }, {
-                     //     id: '2',
-                     //     stu_name: '王小虎',
-                     //     stu_sex: '上海市普陀区金沙江路 1517 弄',
-                     //     stu_cls_id: '男'
-                     //
-                     // }, {
-                     //     id: '3',
-                     //     stu_name: '王小虎',
-                     //     stu_sex: '上海市普陀区金沙江路 1519 弄',
-                     //    stu_cls_id: '男'
-                     // }
-                     ]})
+                     item:[]
+                    })
         //点击后返回值,使用函数表达式写
         const getinfo=(()=>{
             Getinfo({}).then((response = {})=>{
@@ -85,7 +90,6 @@
                   const data = response;
                   console.log("lele",data.data)
                   tableData.item=[data.data]
-
                   root.$message({
                       message: {"返回值" :data.data.stu_name,"id" :data.data.id},
                       type:'success'
@@ -101,7 +105,6 @@
             }).cache(error=>{
             })
         })
-
         const del_message=((id)=>{
             let data =id
             root.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -126,14 +129,47 @@
             });
       })
 
+///编辑  ========================================
+
+         const editInfo = (id) => {
+
+            infoId.value = id;
+            dialog_info_edit.value = true;   //true是打开弹框  这就传入div的<DialogEditInfo 进入到edit的弹窗中，id也传入了通过它:id="infoId"
+
+        }
+
+        const getList = () => {
+            // 单独处理数据
+            alert("sdfjslk:==",1111)
+            let requestData = formatData();
+            // 加载状态
+            loadingData.value = true;
+            GetList(requestData).then(response => {
+                let data = response.data.data
+                // 更新数据
+               table_data.item = data.data
+                // 页面统计数据
+                total.value = data.total
+                // 加载状态
+                loadingData.value = false;
+            }).catch(error => {
+                loadingData.value = false;
+            })
+        }
 
 
-        const edit_info=(()=>{
-            alert(222)
-
-        })
-
-
+    //     const getInfoCategoryAll = () => {
+    //     GetCategoryAll({}).then(response => {
+    //         console.log(response)
+    //         categoryItem.item = response.data.data
+    //     }).catch(error => {})
+    // }
+    //
+    //     const getInfoCategory = () => {
+    //         root.$store.dispatch().then(response => {
+    //             options.category = response
+    //         })
+    //     }
 
 
        //点击提交
@@ -146,8 +182,14 @@
             tableData,
             getinfo,
             del_info,
-            edit_info,
-            del_message
+            editInfo,
+            del_message,
+            infoId,
+            dialog_info_edit,
+            getList
+            // getInfoCategory,
+            // getInfoCategoryAll
+
     }}}
 </script>
 <style scoped>
