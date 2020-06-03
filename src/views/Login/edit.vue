@@ -1,16 +1,16 @@
 <template>
     <el-dialog title="修改" :visible.sync="data.dialog_info_flag" @close="close" width="580px" @opened="openDialog">
         <el-form :model="data.form" ref="addInfoForm">
-            <el-form-item label="输入信息：" :label-width="data.formLabelWidth" prop="category">
-                <!--<el-select v-model="data.form.category" placeholder="请选择活动区域">-->
-                    <!--<el-option -->
-                    <!--v-for="item in data.categoryOption" -->
-                    <!--:key="item.id" -->
-                    <!--:label="item.category_name" -->
-                    <!--:value="item.id">-->
-                    <!--</el-option>-->
-                <!--</el-select>-->
-            </el-form-item>
+            <!--<el-form-item label="输入信息：" :label-width="data.formLabelWidth" prop="category">-->
+                <!--&lt;!&ndash;<el-select v-model="data.form.category" placeholder="请选择活动区域">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-option&ndash;&gt;-->
+                    <!--&lt;!&ndash;v-for="item in data.category"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:key="item.id"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:label="item.category_name"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:value="item.id">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-option>&ndash;&gt;-->
+                <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
+            <!--</el-form-item>-->
             <el-form-item label="姓名：" :label-width="data.formLabelWidth" prop="title">
                 <el-input v-model="data.form.stu_name" placehoder="请输入姓名"></el-input>
             </el-form-item>
@@ -32,7 +32,7 @@
 <script>
 import {Getinfo,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
 import { reactive, ref, watch } from '@vue/composition-api';
-import { editInfo } from './login'
+// import { editInfo } from './login'
 
 export default {
     name: 'dialogInfo',
@@ -108,11 +108,12 @@ export default {
                 id: props.id
             }
             Getinfo1(requestData).then(response => {
-                let responseData = response.data.data.data[0]
+                console.log("修改",response)
+                let responseData = response.data
                 data.form = {
-                    category: responseData.stu_name,
-                    title: responseData.stu_name,
-                    content: responseData.stu_sex
+                    stu_name: responseData.stu_name,
+                    stu_cls_id: responseData.stu_cls_id,
+                    stu_sex: responseData.stu_sex
                 }
             })
         }
@@ -125,11 +126,12 @@ export default {
         const submit = () => {
             let requestData = {
                 id: props.id,
-                categoryId: data.form.category,
-                title: data.form.title,
-                content: data.form.content,
+                stu_name: data.form.stu_name,
+                stu_sex: data.form.stu_sex,
+                stu_cls_id: data.form.stu_cls_id,
             }
-            if(!data.form.category) {
+            console.log(requestData)
+            if(data.form.category) {
                 root.$message({
                     message: '分类不能为空！！',
                     type: 'error'
@@ -137,8 +139,9 @@ export default {
                 return false;
             }
             data.submitLoading = true
-            EdidInfo(requestData).then(response => {
+            editinfo(requestData).then(response => {
                 let responseData = response.data
+                console.log("he",responseData)
                 root.$message({
                     message: responseData.message,
                     type: 'success'

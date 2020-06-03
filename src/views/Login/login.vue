@@ -138,24 +138,26 @@
 
         }
 
-        const getList = () => {
-            // 单独处理数据
-            alert("sdfjslk:==",1111)
-            let requestData = formatData();
-            // 加载状态
-            loadingData.value = true;
-            GetList(requestData).then(response => {
-                let data = response.data.data
-                // 更新数据
-               table_data.item = data.data
-                // 页面统计数据
-                total.value = data.total
-                // 加载状态
-                loadingData.value = false;
-            }).catch(error => {
-                loadingData.value = false;
-            })
-        }
+        // const getList = () => {
+        //     // 单独处理数据
+        //     let requestData = formatData();
+        //                 alert(requestData)
+        //
+        //     // 加载状态
+        //     loadingData.value = true;
+        //     alert(loadingData.value)
+        //     GetList(requestData).then(response => {
+        //         let data = response.data.data
+        //         // 更新数据
+        //        table_data.item = data.data
+        //         // 页面统计数据
+        //         total.value = data.total
+        //         // 加载状态
+        //         loadingData.value = false;
+        //     }).catch(error => {
+        //         loadingData.value = false;
+        //     })
+        // }
 
 
     //     const getInfoCategoryAll = () => {
@@ -186,7 +188,7 @@
             del_message,
             infoId,
             dialog_info_edit,
-            getList
+            // getList
             // getInfoCategory,
             // getInfoCategoryAll
 
