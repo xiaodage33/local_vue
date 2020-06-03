@@ -3,6 +3,8 @@
 <el-input v-model="ruleForm.username" id="username" placeholder="输入username" ></el-input>
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
+        <el-button type="danger" @click="add_getinfo()"> 新增 </el-button>
+
        <div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">
 
        </div>
@@ -35,9 +37,11 @@
 
                  </el-table-column>
      </el-table>
+<!--新增页面-->
+        <DialogAdd :flag.sync="dialog_info_add"   />
 
-
-        <DialogEditInfo :flag.sync="dialog_info_edit" :id="infoId"   @getListEmit="getList" />
+<!--修改页面  @getListEmit="getList"-->
+        <DialogEditInfo :flag.sync="dialog_info_edit" :id="infoId"    />
 
 
     </div>
@@ -48,14 +52,15 @@
     import {Getinfo,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
     import DialogEditInfo from "./edit.vue";
+    import DialogAdd from "../Add/Add.vue"
 
 
 //, { refs, root }
     export default {
         name: "Login",
-        components: {  DialogEditInfo },
+        components: {  DialogEditInfo,DialogAdd },
 
-            props: {
+        props: {
         flag: {
             type: Boolean,
             default: false
@@ -68,10 +73,12 @@
         })
 
         const infoId = ref("");
+        const dialog_info_add = ref(false)
+
         const dialog_info_edit = ref(false);
         const tableData= reactive({
-                     item:[]
-                    })
+                     item:[]   })
+
         //点击后返回值,使用函数表达式写
         const getinfo=(()=>{
             Getinfo({}).then((response = {})=>{
@@ -137,6 +144,13 @@
 
         }
 
+
+        const add_getinfo =()=>{
+            dialog_info_add.value=true;
+
+
+        }
+
         // const getList = () => {
         //     // 单独处理数据
         //     let requestData = formatData();
@@ -187,6 +201,8 @@
             del_message,
             infoId,
             dialog_info_edit,
+            dialog_info_add,
+            add_getinfo,
             // getList
             // getInfoCategory,
             // getInfoCategoryAll

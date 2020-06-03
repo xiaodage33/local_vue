@@ -118,10 +118,10 @@ export default {
             })
         }
         const resetForm = () => {
-            refs.addInfoForm.resetFields();
-            // data.form.category = ''
-            // data.form.title = ''
-            // data.form.content = ''
+            // refs.addInfoForm.resetFields();
+            data.form.stu_name = ''
+            data.form.stu_sex = ''
+            data.form.stu_cls_id = ''
         }
         const submit = () => {
             let requestData = {
@@ -130,7 +130,7 @@ export default {
                 stu_sex: data.form.stu_sex,
                 stu_cls_id: data.form.stu_cls_id,
             }
-            console.log(requestData)
+            console.log("edit-submit",requestData)
             if(data.form.category) {
                 root.$message({
                     message: '分类不能为空！！',
@@ -152,10 +152,10 @@ export default {
                  * 1、暴力型，直接刷新接口
                  * 2、返回列表，手动修改指定的数据
                  */
-                emit("getListEmit");
+                // emit("getListEmit");
                 // 重置表单
-                // resetForm()
-                // root.$refs['addInfoForm'].resetFields();
+                resetForm()
+                root.$refs['addInfoForm'].resetFields();
             }).catch(error => {
                 data.submitLoading = false
             })
