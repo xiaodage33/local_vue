@@ -143,7 +143,7 @@ export default {
                 let responseData = response.data
                 console.log("he",responseData)
                 root.$message({
-                    message: responseData.message,
+                    message: responseData.data,
                     type: 'success'
                 })
                 data.submitLoading = false

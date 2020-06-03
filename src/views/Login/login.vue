@@ -39,7 +39,6 @@
 
         <DialogEditInfo :flag.sync="dialog_info_edit" :id="infoId"   @getListEmit="getList" />
 
-//:category="options.category"
 
     </div>
 </template>
