@@ -4,13 +4,12 @@
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
         <el-button type="danger" @click="add_getinfo()"> 新增 </el-button>
-
-       <div class="tableData.item" v-for="firstItem in tableData.item" :key="firstItem.id">
-
-       </div>
      <el-table
-        :data="tableData.item"
+        :data="tableData.currentItems"
       style="width: 100%">
+         <el-table-column
+            type="index"
+            width="180"/>
       <el-table-column
         prop="id"
         label="id"
@@ -37,6 +36,27 @@
 
                  </el-table-column>
      </el-table>
+
+        <!--底部分页-->
+        <el-row>
+            <el-col :span="12">
+                <el-button size="medium" @click="deleteAll">批量删除</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-pagination
+                    class="pull-right"
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :page-sizes="paginationPageSizes"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                >
+                </el-pagination>
+            </el-col>
+        </el-row>
+
+
 <!--新增页面-->
         <DialogAdd :flag.sync="dialog_info_add"   />
 
@@ -77,17 +97,85 @@
 
         const dialog_info_edit = ref(false);
         const tableData= reactive({
-                     item:[]   })
+            item:[],
+            currentItems: []
+        });
+        const loadingData = ref(false);
 
-        //点击后返回值,使用函数表达式写
-        const getinfo=(()=>{
-            Getinfo({}).then((response = {})=>{
-                let data = response.data;
-                console.log("前端===", data.data)
-                tableData.item = data.data;
-            }).catch(error =>{
-            })
+        const paginationPageSizes = ref([10, 20, 50, 100]);
+
+        //页码
+        const total =ref(0);
+        const page=reactive({
+            pageNumber:1,
+            pageSize: paginationPageSizes.value[0]
         })
+        const handleSizeChange = (val)=>{
+            page.pageSize = val;
+            handleTableChange();
+            console.log(123)
+            console.log(val)
+        }
+        const handleCurrentChange = (val)=>{
+            page.pageNumber=val;
+            handleTableChange();
+            console.log(888)
+            getinfo()
+        }
+
+        // const formatData = () => {
+        //     let requestData = {
+        //         pageNumber: page.pageNumber,
+        //         pageSize: page.pageSize
+        //     }
+        // }
+     //获取所有； 点击后返回值,使用函数表达式写
+        const getinfo= async ()=>{
+            let resquestData = {
+                pageNumber: page.pageNumber,
+                pageSize: page.pageSize
+            };
+            console.log('1');
+            await loadData(()=>{
+                console.log('2')
+            });
+        }
+
+        const loadData = (call = ()=>{})=>{
+            return Getinfo().then((response = {})=>{
+                let data = response.data.data;
+                tableData.item = data;
+                loadingData.value = false;
+                console.log('3');
+                handleTableChange();
+                call()
+            }).catch(error =>{
+                loadingData.value = false
+            })
+        };
+
+        const handleTableChange = ()=>{
+            console.log('tableChange - page', page);
+            const {item = []} = tableData;
+            const {username = ''} = ruleForm;
+            let tempItems = item;
+            if (username) {
+                tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
+            }
+            total.value = tempItems.length;
+            const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
+            const startIndex = (pageNumber - 1) * pageSize;
+            const endIndex = startIndex + pageSize - 1;
+            const currentItem = [];
+            for(let index = 0;index < tempItems.length; index ++) {
+                if (index >=startIndex && index <= endIndex) {
+                    currentItem.push(tempItems[index])
+                }
+            }
+            tableData.currentItems = currentItem;
+            console.log('tableChange - tableData', tableData);
+        };
+
         const Sousuo=(()=>{
             if(ruleForm.username == '')
                 root.$message.error('输入内容不能为空')
@@ -117,7 +205,6 @@
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning',
-
             }).then(() => {
                 delinfo({id:data}).then(response=>{
                 console.log("前端删除返回response",response)
@@ -125,7 +212,6 @@
             root.$message({
                 type: 'success',
                 message: '删除成功!'
-
               })  )
             }).catch(() => {
               root.$message({
@@ -136,19 +222,13 @@
       })
 
 ///编辑  ========================================
-
          const editInfo = (id) => {
-
             infoId.value = id;
             dialog_info_edit.value = true;   //true是打开弹框  这就传入div的<DialogEditInfo 进入到edit的弹窗中，id也传入了通过它:id="infoId"
 
         }
-
-
         const add_getinfo =()=>{
             dialog_info_add.value=true;
-
-
         }
 
         // const getList = () => {
@@ -203,6 +283,11 @@
             dialog_info_edit,
             dialog_info_add,
             add_getinfo,
+            total,
+            handleSizeChange,
+            handleCurrentChange,
+            loadingData,
+            paginationPageSizes
             // getList
             // getInfoCategory,
             // getInfoCategoryAll
