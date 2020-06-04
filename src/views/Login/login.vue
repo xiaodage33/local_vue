@@ -11,6 +11,7 @@
             type="index"
             label="当前页编码"
             width="180"/>
+
       <el-table-column
         prop="id"
         label="id"
@@ -28,6 +29,7 @@
        <el-table-column  prop="stu_sex"
         label="性别" >
        </el-table-column>
+
          <el-table-column
             label="操作" >
                 <template slot-scope="scope">
@@ -36,13 +38,14 @@
                 </template>
 
                  </el-table-column>
+
      </el-table>
 
         <!--底部分页-->
         <el-row>
-            <!--<el-col :span="12">-->
-                <!--<el-button size="medium" @click="deleteAll">批量删除</el-button>-->
-            <!--</el-col>-->
+            <el-col :span="12">
+                <el-button size="medium" @click="deleteAll">批量删除</el-button>
+            </el-col>
             <el-col :span="16">
                 <el-pagination
                     class="pull-right"
@@ -93,13 +96,13 @@
             username:'',
         })
 
-        const infoId = ref("");
-        const dialog_info_add = ref(false)
+        const infoId = ref("");  //赋值修改的id传入到edit
+        const dialog_info_add = ref(false)  //点击添加弹窗的赋值打开和关闭
 
-        const dialog_info_edit = ref(false);
-        const tableData= reactive({
+        const dialog_info_edit = ref(false);   //点击修改弹窗与否
+        const tableData= reactive({   // 定义table表的数据 是一个数组
             item:[],
-            currentItems: []
+            currentItems: []    //定义列表分页
         });
         const loadingData = ref(false);
 
