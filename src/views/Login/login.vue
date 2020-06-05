@@ -4,7 +4,12 @@
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
         <el-button type="danger" @click="add_getinfo()"> 新增 </el-button>
-     <el-table
+        <div :v-model="getdatekb.item" v-for="(value,key) in getdatekb.item">
+            <table border="1px" >  <tr> <td> {{ key }}  </td>  </tr>  </table>
+        </div>
+
+
+        <el-table
         :data="tableData.currentItems"
       style="width: 100%">
          <el-table-column
@@ -132,52 +137,62 @@
         //         pageSize: page.pageSize
         //     }
         // }
-     //获取所有； 点击后返回值,使用函数表达式写
-        const getinfo= async ()=>{    //async async 表示函数里有异步操作
-            let resquestData = {
-                pageNumber: page.pageNumber,
-                pageSize: page.pageSize
-            };
-            console.log('1');
-            await loadData(()=>{
-                console.log('2')
-            });
+
+        const getdatekb = ({
+             item:[],
+        })
+        const getinfo=()=>{
+            Getinfo().then((response={})=>{
+                let data =response.data.kubernetes.backends;
+                getdatekb.item = data
+                console.log("haha",data)
+            })
         }
 
-        const loadData = (call = ()=>{})=>{
-            return Getinfo().then((response = {})=>{
-                let data = response.data.data;
-                tableData.item = data;
-                loadingData.value = false;
-                console.log('3');
-                handleTableChange();
-                call()
-            }).catch(error =>{
-                loadingData.value = false
-            })
-        };
-
-        const handleTableChange = ()=>{
-            console.log('tableChange - page', page);
-            const {item = []} = tableData;
-            const {username = ''} = ruleForm;
-            let tempItems = item;
-            if (username) {
-                tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
-            }
-            total.value = tempItems.length;
-            const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
-            const startIndex = (pageNumber - 1) * pageSize;
-            const endIndex = startIndex + pageSize - 1;
-            const currentItem = [];
-            for(let index = 0;index < tempItems.length; index ++) {
-                if (index >=startIndex && index <= endIndex) {
-                    currentItem.push(tempItems[index])
-                }
-            }
-            tableData.currentItems = currentItem;
-            console.log('tableChange - tableData', tableData);
-        };
+     // //获取所有； 点击后返回值,使用函数表达式写
+     //    const getinfo= async ()=>{    //async async 表示函数里有异步操作
+     //        let resquestData = {
+     //            pageNumber: page.pageNumber,
+     //            pageSize: page.pageSize
+     //        };
+     //        await loadData(()=>{
+     //        });
+     //    }
+     //
+     //    const loadData = (call = ()=>{})=>{
+     //        return Getinfo().then((response = {})=>{
+     //            let data = response.data.data;
+     //            tableData.item = data.kubernetes.backends;
+     //            loadingData.value = false;
+     //            conosle.log("来呀",tableData.item)
+     //            handleTableChange();
+     //            call()
+     //        }).catch(error =>{
+     //            loadingData.value = false
+     //        })
+     //    };
+     //
+     //    const handleTableChange = ()=>{
+     //        console.log('tableChange - page', page);
+     //        const {item = []} = tableData;
+     //        const {username = ''} = ruleForm;
+     //        let tempItems = item;
+     //        if (username) {
+     //            tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
+     //        }
+     //        total.value = tempItems.length;
+     //        const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
+     //        const startIndex = (pageNumber - 1) * pageSize;
+     //        const endIndex = startIndex + pageSize - 1;
+     //        const currentItem = [];
+     //        for(let index = 0;index < tempItems.length; index ++) {
+     //            if (index >=startIndex && index <= endIndex) {
+     //                currentItem.push(tempItems[index])
+     //            }
+     //        }
+     //        tableData.currentItems = currentItem;
+     //        console.log('tableChange - tableData', tableData);
+     //    };
 
         const Sousuo=(()=>{
             if(ruleForm.username == '')
@@ -272,7 +287,7 @@
 
        //点击提交
         onMounted(()=>{
-            // Getinfo()
+            // getinfo()
         })
         return{
             ruleForm,
@@ -290,7 +305,8 @@
             handleSizeChange,
             handleCurrentChange,
             loadingData,
-            paginationPageSizes
+            paginationPageSizes,
+            getdatekb
             // getList
             // getInfoCategory,
             // getInfoCategoryAll

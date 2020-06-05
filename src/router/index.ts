@@ -20,6 +20,11 @@ Vue.use(VueRouter)
     name: 'Add',
     component: () => import('../views/Add/Add.vue')
   },
+   {
+    path: '/trae',
+    name: 'Trae',
+    component: () => import('../views/Login/Trae.vue')
+  },
   {
     path: '/about',
     name: 'About',

@@ -14,7 +14,7 @@
             <el-form-item label="姓名：" :label-width="data.formLabelWidth" prop="title">
                 <el-input v-model="data.form.stu_name" placehoder="请输入姓名"></el-input>
             </el-form-item>
-            <el-form-item label="班级：" :label-width="data.formLabelWidth" prop="content">
+            <el-form-item label="班级：" :label-width="data.formLabelWidth" prop="contreactiveent">
                 <el-input type="textarea" v-model="data.form.stu_cls_id" placehoder="请输入班级"></el-input>
             </el-form-item>
 

@@ -25,7 +25,7 @@ module.exports = {
       hotOnly: false,
       proxy: {
           '/__api__': {
-              target: "http://127.0.0.1:9999/vv/", //API服务器的地址  http://www.web-jshtml.cn/api
+              target: "http://192.168.10.18:8580/api/", //API服务器的地址  http://www.web-jshtml.cn/api
 
               // target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
               changeOrigin: true,
