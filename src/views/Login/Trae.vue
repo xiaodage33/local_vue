@@ -1,5 +1,7 @@
 <template>
     <div>
+        <el-input v-model="tableData.username" id="username" placeholder="输入username" ></el-input>
+
         <p  style="align:center;margin: 13px"  > <font size="5" face="arial" color="red"> Ingress 列表  </font> </p>
         <el-button type="danger" @click="getinfo"  > 查询</el-button>
            <el-table
@@ -52,8 +54,9 @@
             // const date1 = ref('');  //ref声明数据
 
 
-       const tableData= reactive({   // 定义table表的数据 是一个数组
-            item:[],
+       const tableData= reactive({    // 定义table表的数据 是一个数组
+           username:'',
+           item:[],
             currentItems: []    //定义列表分页
         });
 
@@ -76,16 +79,10 @@
             getinfo();
         }
 
-        // const formatData = () => {
-        //     let requestData = {
-        //         pageNumber: page.pageNumber,
-        //         pageSize: page.pageSize
-        //     }
-        // }
-     //获取所有； 点击后返回值,使用函数表达式写
+       //获取所有； 点击后返回值,使用函数表达式写
         const getinfo= async ()=>{    //async async 表示函数里有异步操作
             // let resquestData = {
-            //     pageNumber: page.pageNumber,
+            //     pageNumber: page.pageNumber,  //以后传值使用
             //     pageSize: page.pageSize
             // };
             console.log('1');
@@ -110,11 +107,11 @@
         const handleTableChange = ()=>{
             console.log('tableChange - page', page);
             const {item = []} = tableData;
-            // const {username = ''} = ruleForm;
+            const {username = ''} = tableData;
             let tempItems = item;
-            // if (username) {
-            //     tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
-            // }
+            if (username) {
+                tempItems = item.filter(i=>i.ingress.indexOf(username)>-1);
+            }
             total.value = tempItems.length;
             const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
             const startIndex = (pageNumber - 1) * pageSize;
