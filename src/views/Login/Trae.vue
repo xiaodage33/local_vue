@@ -4,19 +4,59 @@
 
 
         <el-button type="danger" @click="getinfo()"> 查询</el-button>
-      <div id="data_get.tra" v-for="(key,value) in data_get.tra">
-            <table width="100%" cellspacing="10">
-                <tr>
-                    <td>
-                        {{ value }}
-                    </td>
-                    <td cellspacing="10" v-for="aa in key.servers">{{ aa }}</td>
-                    <td><a src="#"/>修改</td>
-                </tr>
+      <!--<div id="data_get.tra" v-for="(key,value) in data_get.tra">-->
+            <!--<table width="100%" cellspacing="10">-->
+                <!--<tr>-->
+                    <!--<td>-->
+                        <!--{{ value }}-->
+                    <!--</td>-->
+                    <!--<td cellspacing="10" v-for="aa in key.servers">{{ aa }}</td>-->
+                    <!--<td><a src="#"/>修改</td>-->
+                <!--</tr>-->
 
-            </table>
-        </div>
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+
+          <el-table
+        :data="data_get.tra"
+      style="width: 100%">
+         <el-table-column
+            type="index"
+            label="当前页编码"
+            width="180"/>
+
+      <el-table-column
+        prop="ingress"
+        label="id"
+        width="180">
+      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="stu_name"-->
+        <!--label="姓名"-->
+        <!--width="180">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="stu_cls_id"-->
+        <!--label="班级">-->
+      <!--</el-table-column>-->
+       <!--<el-table-column  prop="stu_sex"-->
+        <!--label="性别" >-->
+       <!--</el-table-column>-->
+
+         <el-table-column
+            label="操作" >
+                <template slot-scope="scope">
+                    <el-button type="danger" size="mini" @click='del_message(scope.row.id)'>删除</el-button>
+                    <el-button type="success" size="mini" :id="infoId" @click=editInfo(scope.row.id)>编辑</el-button>
+                </template>
+
+                 </el-table-column>
+
+     </el-table>
+
     </div>
+
 </template>
 <script>
     import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
@@ -34,7 +74,8 @@
             const getinfo = () => {
                 console.log(date1.value)
                 Getinfo().then((request)=>{
-                     data_get.tra = request.data.kubernetes.backends
+                     data_get.tra = request.data.data
+
                     console.log("哈哈",data_get.tra)
                 }).cache(error=>{
 
