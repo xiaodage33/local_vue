@@ -4,12 +4,7 @@
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
         <el-button type="danger" @click="getinfo()"> 查询 </el-button>
         <el-button type="danger" @click="add_getinfo()"> 新增 </el-button>
-        <div :v-model="getdatekb.item" v-for="(value,key) in getdatekb.item">
-            <table border="1px" >  <tr> <td> {{ key }}  </td>  </tr>  </table>
-        </div>
-
-
-        <el-table
+     <el-table
         :data="tableData.currentItems"
       style="width: 100%">
          <el-table-column
@@ -103,16 +98,15 @@
 
         const infoId = ref("");  //赋值修改的id传入到edit
         const dialog_info_add = ref(false)  //点击添加弹窗的赋值打开和关闭
+        const loadingData = ref(false);
+
 
         const dialog_info_edit = ref(false);   //点击修改弹窗与否
         const tableData= reactive({   // 定义table表的数据 是一个数组
             item:[],
             currentItems: []    //定义列表分页
         });
-        const loadingData = ref(false);
-
         const paginationPageSizes = ref([10, 20, 50, 100]);
-
         //页码
         const total =ref(0);
         const page=reactive({
@@ -137,63 +131,54 @@
         //         pageSize: page.pageSize
         //     }
         // }
-
-        const getdatekb = ({
-             item:[],
-        })
-        const getinfo=()=>{
-            Getinfo().then((response={})=>{
-                let data =response.data.kubernetes.backends;
-                getdatekb.item = data
-                console.log("haha",data)
-            })
+     //获取所有； 点击后返回值,使用函数表达式写
+        const getinfo= async ()=>{    //async async 表示函数里有异步操作
+            let resquestData = {
+                pageNumber: page.pageNumber,
+                pageSize: page.pageSize
+            };
+            console.log('1');
+            await loadData(()=>{
+                console.log('2')
+            });
         }
 
-     // //获取所有； 点击后返回值,使用函数表达式写
-     //    const getinfo= async ()=>{    //async async 表示函数里有异步操作
-     //        let resquestData = {
-     //            pageNumber: page.pageNumber,
-     //            pageSize: page.pageSize
-     //        };
-     //        await loadData(()=>{
-     //        });
-     //    }
-     //
-     //    const loadData = (call = ()=>{})=>{
-     //        return Getinfo().then((response = {})=>{
-     //            let data = response.data.data;
-     //            tableData.item = data.kubernetes.backends;
-     //            loadingData.value = false;
-     //            conosle.log("来呀",tableData.item)
-     //            handleTableChange();
-     //            call()
-     //        }).catch(error =>{
-     //            loadingData.value = false
-     //        })
-     //    };
-     //
-     //    const handleTableChange = ()=>{
-     //        console.log('tableChange - page', page);
-     //        const {item = []} = tableData;
-     //        const {username = ''} = ruleForm;
-     //        let tempItems = item;
-     //        if (username) {
-     //            tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
-     //        }
-     //        total.value = tempItems.length;
-     //        const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
-     //        const startIndex = (pageNumber - 1) * pageSize;
-     //        const endIndex = startIndex + pageSize - 1;
-     //        const currentItem = [];
-     //        for(let index = 0;index < tempItems.length; index ++) {
-     //            if (index >=startIndex && index <= endIndex) {
-     //                currentItem.push(tempItems[index])
-     //            }
-     //        }
-     //        tableData.currentItems = currentItem;
-     //        console.log('tableChange - tableData', tableData);
-     //    };
+        const loadData = (call = ()=>{})=>{
+            return Getinfo().then((response = {})=>{
+                let data = response.data.data;
+                tableData.item = data;
+                loadingData.value = false;
+                console.log('3');
+                handleTableChange();
+                call()
+            }).catch(error =>{
+                loadingData.value = false
+            })
+        };
 
+        const handleTableChange = ()=>{
+            console.log('tableChange - page', page);
+            const {item = []} = tableData;
+            const {username = ''} = ruleForm;
+            let tempItems = item;
+            if (username) {
+                tempItems = item.filter(i=>i.stu_name.indexOf(username)>-1);
+            }
+            total.value = tempItems.length;
+            const {pageSize = paginationPageSizes[0], pageNumber = 1} = page;
+            const startIndex = (pageNumber - 1) * pageSize;
+            const endIndex = startIndex + pageSize - 1;
+            const currentItem = [];
+            for(let index = 0;index < tempItems.length; index ++) {
+                if (index >=startIndex && index <= endIndex) {
+                    currentItem.push(tempItems[index])
+                }
+            }
+            tableData.currentItems = currentItem;
+            console.log('tableChange - tableData', tableData);
+        };
+
+        //
         const Sousuo=(()=>{
             if(ruleForm.username == '')
                 root.$message.error('输入内容不能为空')
@@ -287,7 +272,7 @@
 
        //点击提交
         onMounted(()=>{
-            // getinfo()
+            // Getinfo()
         })
         return{
             ruleForm,
@@ -305,8 +290,7 @@
             handleSizeChange,
             handleCurrentChange,
             loadingData,
-            paginationPageSizes,
-            getdatekb
+            paginationPageSizes
             // getList
             // getInfoCategory,
             // getInfoCategoryAll
