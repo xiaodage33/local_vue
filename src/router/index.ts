@@ -26,6 +26,11 @@ Vue.use(VueRouter)
     component: () => import('../views/Login/Trae.vue')
   },
   {
+    path: '/k8slog',
+    name: 'kubernetes_log',
+    component: () => import('../views/Login/kubernetes_log.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting

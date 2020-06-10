@@ -26,7 +26,8 @@
         prop="stu_cls_id"
         label="班级">
       </el-table-column>
-       <el-table-column  prop="stu_sex"
+       <el-table-column
+       prop="stu_sex"
         label="性别" >
        </el-table-column>
 
@@ -102,6 +103,7 @@
 
 
         const dialog_info_edit = ref(false);   //点击修改弹窗与否
+
         const tableData= reactive({   // 定义table表的数据 是一个数组
             item:[],
             currentItems: []    //定义列表分页

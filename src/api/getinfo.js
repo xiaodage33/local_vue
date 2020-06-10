@@ -43,3 +43,12 @@ export function editinfo(data){
         data,
     })
 }
+
+export function k8slog(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/k8s/log",
+        data,
+    })
+}
+
