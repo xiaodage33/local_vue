@@ -49,6 +49,8 @@
                 </el-pagination>
             </el-col>
         </el-row>
+<!--//显示日志页面-->
+        <Dilog_ShowLog :flag.sync="dialog_info_show" />
 
 </div>
 </template>
@@ -56,8 +58,13 @@
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
 import { k8slog,LogInfo } from "../../api/getinfo"
+import Dilog_ShowLog from "./Dilog_ShowLog"
     export default {
         name: "kubernetes_log",
+        component: { Dilog_ShowLog },
+
+
+
     setup(props) {
         const tableData = reactive({
             // item: [],
