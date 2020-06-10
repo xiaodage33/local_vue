@@ -3,6 +3,7 @@
 
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
+        <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
 
         <el-button type="danger" @click="k8slog_b"> 查询</el-button>
 
@@ -24,6 +25,8 @@
                 <template slot-scope="scope">
                     <el-button type="danger" size="mini" @click='del_message(scope.row.id)' >删除</el-button>
                     <el-button type="success" size="mini"  @click=editInfo(scope.row.id)>编辑</el-button>
+                    <el-button type="success" size="mini"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
+
                 </template>
 
             </el-table-column>
@@ -52,12 +55,13 @@
 
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
-import { k8slog } from "../../api/getinfo"
+import { k8slog,LogInfo } from "../../api/getinfo"
     export default {
         name: "kubernetes_log",
     setup(props) {
         const tableData = reactive({
-            item: [],
+            // item: [],
+            username:'',
             currentItems: []    //定义列表分页
         })
 
@@ -79,8 +83,6 @@ import { k8slog } from "../../api/getinfo"
             handleTableChange();
             k8slog_b();
         }
-
-
         const k8slog_b = () => {
             k8slog().then((response) => {
                 let data = response.data
@@ -92,7 +94,6 @@ import { k8slog } from "../../api/getinfo"
 
             })
         }
-
         const handleTableChange = ()=>{
         console.log('tableChange - page', page);
         const {item = []} = tableData;
@@ -116,11 +117,24 @@ import { k8slog } from "../../api/getinfo"
         console.log('==tableChange - tableData==', tableData.currentItems);
     };
 
+        //catlog
+        const Cat_Log=(pod)=>{
+            // alert(pod)
+            LogInfo(pod).then((response)=>{
+                let data = response.data.data
+                alert(data)
+            })
+
+        }
+
+
+
         return{
             tableData,
             k8slog_b,
             total,
-            paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange
+            paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
+            Cat_Log
         }
     }
 }

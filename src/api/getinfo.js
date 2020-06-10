@@ -51,4 +51,11 @@ export function k8slog(data){
         data,
     })
 }
+export function LogInfo(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/k8s/loginfo",
+        data,
+    })
+}
 
