@@ -25,7 +25,7 @@
                 <template slot-scope="scope">
                     <el-button type="danger" size="mini" @click='del_message(scope.row.id)' >删除</el-button>
                     <el-button type="success" size="mini"  @click=editInfo(scope.row.id)>编辑</el-button>
-                    <el-button type="success" size="mini" :id="infoId"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
+                    <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
                                                                                 <!--scope.row.pod 可以这么传pod名字-->
                 </template>
 
@@ -50,7 +50,7 @@
             </el-col>
         </el-row>
 <!--//显示日志页面-->
-        <Dilog_ShowLog :flag.sync="dialog_info_add"  />
+        <Dilog_ShowLog :flag.sync="dialog_info_add"  :pod="infoPod"  />
 
 </div>
 </template>
@@ -76,7 +76,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         })
 
         const dialog_info_add = ref(false)  //弹框传值
-        const infoId = ref("")
+        const infoPod = ref("")
 
 
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
@@ -131,9 +131,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
     };
 
         //catlog
-        const Cat_Log=(id)=>{
-            alert(id)
-            infoId.value=id
+        const Cat_Log=(pod)=>{
+            infoPod.value=pod
+            console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;
             }
 
@@ -145,7 +145,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
-            dialog_info_add,infoId
+            dialog_info_add,infoPod
 
         }
     }

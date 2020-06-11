@@ -2,11 +2,17 @@
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
 
     <el-dialog
-  title="提示"
-  :visible.sync="data.dialog_info_flag"
-  width="30%"
-  @opened="openDialog">
-  <span>3333</span>
+          title="日志"
+          :visible.sync="data.dialog_info_flag"
+          width="70%"
+          @opened="openDialog"
+          :pod="data.pod_log_info"
+           :pod_name ="data.pod_name" >
+        <div> podName:{{data.pod_name}}   </div>
+       <textarea rows="10" cols="16">
+           {{ data.pod_log_info }}
+       </textarea>
+        　
   <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="close">确 定</el-button>
   </span>
@@ -25,7 +31,7 @@
                 type: Boolean,
                 default: false
             },
-            id: {
+            pod: {
             type: String,
             default: ""
         }
@@ -34,9 +40,14 @@
 
         const data = reactive({
             dialog_info_flag: false,   //弹窗标记
+            pod_log_info:"",
+            pod_name:""
+
         })
 
         const dialogVisible = ref(false)
+
+
         const handleClose=(done)=>
         {
             root.$confirm('确认关闭？')
@@ -45,10 +56,12 @@
                     done();
                 })
                 .catch(_ => {
+                    emit("update:flag", false);
                 });
         }
 
         watch(() => {data.dialog_info_flag = props.flag   });
+
 
         const close = () => {
             data.dialog_info_flag=false;
@@ -56,14 +69,20 @@
         }
 
         const openDialog = () => {
-            console.log("openDialog=",props.id)
             getLog()   //查日志
         }
 
         const getLog=()=>{
-            let requestData = {pod:props.pod}
+            let requestData = props.pod
+            data.pod_name =requestData
+            console.log("deng",requestData)
             LogInfo(requestData).then(response =>{
-                let showdata = response.data.data
+                data.pod_log_info = response.data.data
+                console.log("日志：",data.pod_name)
+                // data.pod_log = data.pod_log.split(/[(\r\n)\r\n]+/);
+
+
+
             })
 
         }
