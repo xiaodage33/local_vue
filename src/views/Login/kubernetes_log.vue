@@ -2,6 +2,13 @@
     <div>
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
+        <el-badge :value="100"
+                  :class=item
+                  class="pull-left"
+                  type="primary">
+  <el-button size="small">现有报错pod数量</el-button>
+</el-badge>
+
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
         <el-button type="danger" @click="k8slog_b"> 查询</el-button>&nbsp;
          <el-link type="primary"   > <font size="3" color="red"> 查看ingress </font></el-link>
@@ -143,4 +150,10 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
 }
 </script>
 <style scoped>
+
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
+
 </style>
