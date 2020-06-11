@@ -1,21 +1,17 @@
 <template>
     <div>
-
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
-
-        <el-button type="danger" @click="k8slog_b"> 查询</el-button>
-
+        <el-button type="danger" @click="k8slog_b"> 查询</el-button>&nbsp;
+         <el-link type="primary"   > <font size="3" color="red"> 查看ingress </font></el-link>
         <el-table
-                :data="tableData.currentItems"
-                style="width: 100%;border: 5px;"
-         v-loading="loading"
-         element-loading-text="拼命加载中"
-         element-loading-spinner="el-icon-loading"
-         element-loading-background="rgba(0, 0, 0, 0.8)"
-
-                >
+            :data="tableData.currentItems"
+             style="width: 100%;border: 5px;"
+             v-loading="loading"
+             element-loading-text="拼命加载中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.8)" >
             <el-table-column
                     prop="pod"
                     label="集群pod"
@@ -31,24 +27,16 @@
                 <template slot-scope="scope">
                     <el-popconfirm
                       title="你还没有权限？">
-                     <!--<el-button slot="reference">删除</el-button>-->
-
                         <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" >删除</el-button>
                         <el-button type="success" size="mini"  @click='editInfo(scope.row.id)' slot="reference" :loading="true">编辑</el-button>
-
                         <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod) slot="reference" >查看日志</el-button>
                                                                                 <!--scope.row.pod 可以这么传pod名字-->
                     </el-popconfirm>
                 </template>
-
             </el-table-column>
-
         </el-table>
         <!--//创建分页-->
         <el-row>
-            <!--<el-col :span="12">-->
-            <!--<el-button size="medium" @click="deleteAll">批量删除</el-button>-->
-            <!--</el-col>-->
             <el-col :span="12">
                 <el-pagination
                         class="pull-right"
@@ -63,10 +51,8 @@
         </el-row>
 <!--//显示日志页面-->
         <Dilog_ShowLog :flag.sync="dialog_info_add"  :pod="infoPod"  />
-
 </div>
 </template>
-
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
 import { k8slog,LogInfo } from "../../api/getinfo"
@@ -86,12 +72,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             username:'',
             currentItems: []    //定义列表分页
         })
-
         const dialog_info_add = ref(false)  //弹框传值
         const infoPod = ref("")
         const loading = ref(false)
-
-
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
         //页码
         const total =ref(0);
@@ -102,7 +85,6 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         const handleSizeChange = (val)=>{   //改变页面显示条数
             page.pageSize = val;  //10 ，20 ，30等
             handleTableChange();
-
         }
         const handleCurrentChange = (val)=>{
             page.pageNumber=val;
@@ -112,15 +94,12 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         const k8slog_b = () => {
             loading.value=true   //拼命加载
             k8slog().then((response) => {
-
                 let data = response.data
                 tableData.item = data.data
                 tableData.currentItems =data.data
-
                 handleTableChange()
                 console.log("pod", tableData.item)
             }).cache(error => {
-
             })
         }
         const handleTableChange = ()=>{
@@ -146,16 +125,12 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         loading.value=false    //拼命加载
         console.log('==tableChange - tableData==', tableData.currentItems);
     };
-
         //catlog
         const Cat_Log=(pod)=>{
             infoPod.value=pod
             console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;
             }
-
-
-
         return{
             tableData,
             k8slog_b,
@@ -163,12 +138,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
             dialog_info_add,infoPod,loading
-
         }
     }
 }
 </script>
-
 <style scoped>
-
 </style>
