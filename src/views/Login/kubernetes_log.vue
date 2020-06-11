@@ -9,7 +9,13 @@
 
         <el-table
                 :data="tableData.currentItems"
-                style="width: 100%;border: 5px;">
+                style="width: 100%;border: 5px;"
+         v-loading="loading"
+         element-loading-text="拼命加载中"
+         element-loading-spinner="el-icon-loading"
+         element-loading-background="rgba(0, 0, 0, 0.8)"
+
+                >
             <el-table-column
                     prop="pod"
                     label="集群pod"
@@ -23,10 +29,16 @@
             <el-table-column
                     label="操作">
                 <template slot-scope="scope">
-                    <el-button type="danger" size="mini" @click='del_message(scope.row.id)' >删除</el-button>
-                    <el-button type="success" size="mini"  @click=editInfo(scope.row.id)>编辑</el-button>
-                    <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
+                    <el-popconfirm
+                      title="你还没有权限？">
+                     <!--<el-button slot="reference">删除</el-button>-->
+
+                        <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" >删除</el-button>
+                        <el-button type="success" size="mini"  @click='editInfo(scope.row.id)' slot="reference" :loading="true">编辑</el-button>
+
+                        <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod) slot="reference" >查看日志</el-button>
                                                                                 <!--scope.row.pod 可以这么传pod名字-->
+                    </el-popconfirm>
                 </template>
 
             </el-table-column>
@@ -77,6 +89,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
 
         const dialog_info_add = ref(false)  //弹框传值
         const infoPod = ref("")
+        const loading = ref(false)
 
 
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
@@ -97,10 +110,13 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             k8slog_b();
         }
         const k8slog_b = () => {
+            loading.value=true   //拼命加载
             k8slog().then((response) => {
+
                 let data = response.data
                 tableData.item = data.data
                 tableData.currentItems =data.data
+
                 handleTableChange()
                 console.log("pod", tableData.item)
             }).cache(error => {
@@ -127,6 +143,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             }
         }
         tableData.currentItems = currentItem;
+        loading.value=false    //拼命加载
         console.log('==tableChange - tableData==', tableData.currentItems);
     };
 
@@ -145,7 +162,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
-            dialog_info_add,infoPod
+            dialog_info_add,infoPod,loading
 
         }
     }
