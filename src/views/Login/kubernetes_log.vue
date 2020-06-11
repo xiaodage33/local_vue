@@ -25,8 +25,8 @@
                 <template slot-scope="scope">
                     <el-button type="danger" size="mini" @click='del_message(scope.row.id)' >删除</el-button>
                     <el-button type="success" size="mini"  @click=editInfo(scope.row.id)>编辑</el-button>
-                    <el-button type="success" size="mini"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
-
+                    <el-button type="success" size="mini" :id="infoId"  @click=Cat_Log(scope.row.pod)>查看日志</el-button>
+                                                                                <!--scope.row.pod 可以这么传pod名字-->
                 </template>
 
             </el-table-column>
@@ -50,7 +50,7 @@
             </el-col>
         </el-row>
 <!--//显示日志页面-->
-        <Dilog_ShowLog :flag.sync="dialog_info_show" />
+        <Dilog_ShowLog :flag.sync="dialog_info_add"  />
 
 </div>
 </template>
@@ -58,19 +58,25 @@
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
 import { k8slog,LogInfo } from "../../api/getinfo"
-import Dilog_ShowLog from "./Dilog_ShowLog"
+import Dilog_ShowLog from "./Dilog_ShowLog.vue"
     export default {
         name: "kubernetes_log",
-        component: { Dilog_ShowLog },
-
-
-
-    setup(props) {
+        components: { Dilog_ShowLog },
+        props:{
+            flag:{
+                type: Boolean,
+                default: false
+            }
+        },
+    setup(props,{root}) {
         const tableData = reactive({
             // item: [],
             username:'',
             currentItems: []    //定义列表分页
         })
+
+        const dialog_info_add = ref(false)  //弹框传值
+        const infoId = ref("")
 
 
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
@@ -125,14 +131,11 @@ import Dilog_ShowLog from "./Dilog_ShowLog"
     };
 
         //catlog
-        const Cat_Log=(pod)=>{
-            // alert(pod)
-            LogInfo(pod).then((response)=>{
-                let data = response.data.data
-                alert(data)
-            })
-
-        }
+        const Cat_Log=(id)=>{
+            alert(id)
+            infoId.value=id
+            dialog_info_add.value=true;
+            }
 
 
 
@@ -141,7 +144,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog"
             k8slog_b,
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
-            Cat_Log
+            Cat_Log,
+            dialog_info_add,infoId
+
         }
     }
 }

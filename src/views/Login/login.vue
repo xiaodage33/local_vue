@@ -2,7 +2,7 @@
     <div>
 <el-input v-model="ruleForm.username" id="username" placeholder="输入username" ></el-input>
    <el-button type="danger" @click="Sousuo()"> 搜索 </el-button>
-        <el-button type="danger" @click="getinfo()"> 查询 </el-button>
+        <el-button type="danger" @click="getinfo_Stu()"> 查询 </el-button>
         <el-button type="danger" @click="add_getinfo()"> 新增 </el-button>
      <el-table
         :data="tableData.currentItems"
@@ -74,7 +74,7 @@
 <script>
     // import service from '../../utils/request'  //测试的
     import axios from 'axios'
-    import {Getinfo,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
+    import {Getinfo_Stu,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
     import { reactive, ref, isRef, toRefs, onMounted } from '@vue/composition-api';
     import DialogEditInfo from "./edit.vue";
     import DialogAdd from "../Add/Add.vue"
@@ -124,7 +124,7 @@
         const handleCurrentChange = (val)=>{
             page.pageNumber=val;
             handleTableChange();
-            getinfo()
+            getinfo_Stu()
         }
 
         // const formatData = () => {
@@ -134,7 +134,7 @@
         //     }
         // }
      //获取所有； 点击后返回值,使用函数表达式写
-        const getinfo= async ()=>{    //async async 表示函数里有异步操作
+        const getinfo_Stu= async ()=>{    //async async 表示函数里有异步操作
             let resquestData = {
                 pageNumber: page.pageNumber,
                 pageSize: page.pageSize
@@ -146,11 +146,11 @@
         }
 
         const loadData = (call = ()=>{})=>{
-            return Getinfo().then((response = {})=>{
+            return Getinfo_Stu().then((response = {})=>{
                 let data = response.data.data;
                 tableData.item = data;
                 loadingData.value = false;
-                console.log('3');
+                console.log('3',data);
                 handleTableChange();
                 call()
             }).catch(error =>{
@@ -280,7 +280,7 @@
             ruleForm,
             Sousuo,
             tableData,
-            getinfo,
+            getinfo_Stu,
             del_info,
             editInfo,
             del_message,
