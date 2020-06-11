@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <el-input v-model="tableData.username" id="username" placeholder="输入username" type="mini"></el-input>
+        <el-input v-model="tableData.username" id="username" placeholder="关键词查找ingress服务" type="mini"></el-input>
         <p  style="align:center;margin: 13px"  > <font size="5" face="arial" color="red"> Ingress 列表  </font> </p>
         <el-button type="danger" @click="getinfo"  > 查询</el-button>
            <el-table

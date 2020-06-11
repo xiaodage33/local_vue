@@ -2,14 +2,15 @@
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
 
     <el-dialog
-          title="日志"
+          title="展示日志"
           :visible.sync="data.dialog_info_flag"
           width="70%"
           @opened="openDialog"
           :pod="data.pod_log_info"
-           :pod_name ="data.pod_name" >
-        <div> podName:{{data.pod_name}}   </div>
-       <textarea rows="10" cols="16">
+          :pod_name ="data.pod_name" >
+        <div> podName:{{data.pod_name}}   </div><br>
+
+       <textarea rows="30" cols="150">
            {{ data.pod_log_info }}
        </textarea>
         　
