@@ -4,18 +4,21 @@
     <el-dialog
           title="展示日志"
           :visible.sync="data.dialog_info_flag"
-          width="70%"
+          width="60%"
           @opened="openDialog"
           :pod="data.pod_log_info"
-          :pod_name ="data.pod_name" >
-        <div> podName:{{data.pod_name}}   </div><br>
+          :pod_name ="data.pod_name"
+          :before-close ="handleDialogClose"  >
+        <div> <font size="6" color="red"> Pod名字：{{data.pod_name}}   </font></div><br>
 
        <textarea rows="30" cols="150">
            {{ data.pod_log_info }}
        </textarea>
         　
   <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="close">确 定</el-button>
+    <el-button type="primary" @click="close">关闭</el-button>
+          <el-button type="primary" @click="log_flush" v-loading="loading" >刷新</el-button>
+
   </span>
 </el-dialog>
 
@@ -47,19 +50,7 @@
         })
 
         const dialogVisible = ref(false)
-
-
-        const handleClose=(done)=>
-        {
-            root.$confirm('确认关闭？')
-                .then(_ => {
-                    emit("update:flag", false);
-                    done();
-                })
-                .catch(_ => {
-                    emit("update:flag", false);
-                });
-        }
+        const loading = ref(false)
 
         watch(() => {data.dialog_info_flag = props.flag   });
 
@@ -80,18 +71,22 @@
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
                 console.log("日志：",data.pod_name)
+                loading.value=false
                 // data.pod_log = data.pod_log.split(/[(\r\n)\r\n]+/);
-
-
-
             })
-
         }
-
+        const handleDialogClose=()=>{    //右上角关闭按钮
+            emit("update:flag", false);
+        }
+        const log_flush=()=>{     //点击刷新
+            loading.value=true
+            getLog()
+        }
 
       return {
         dialogVisible,
-          data,close,handleClose,openDialog
+          data,close,openDialog,handleDialogClose,log_flush,
+          loading
       }
     }
     }
