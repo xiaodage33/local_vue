@@ -2,16 +2,19 @@
     <div>
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
-        <el-badge :value="100"
+        <el-badge :value="data.data_num"
                   :class="item"
                   class="pull-left"
                   type="primary">
-  <el-button size="small">现有报错pod数量</el-button>
+  <el-button size="small" @click="errorNumLog">点击刷新查看 现有报错pod数量</el-button>
+
 </el-badge>
+         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left"> {{ err.data_podname }} </span>
 
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
         <el-button type="danger" @click="k8slog_b"> 查询</el-button>&nbsp;
-         <el-link type="primary"   > <font size="3" color="red"> 查看ingress </font></el-link>
+         <el-link type="primary"  href="http://192.168.9.240:8080/trae"  > 查看ingress | service </el-link>
+
         <el-table
             :data="tableData.currentItems"
              style="width: 100%;border: 5px;"
@@ -62,7 +65,7 @@
 </template>
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
-import { k8slog,LogInfo } from "../../api/getinfo"
+import { k8slog,LogInfo,getError } from "../../api/getinfo"
 import Dilog_ShowLog from "./Dilog_ShowLog.vue"
     export default {
         name: "kubernetes_log",
@@ -75,13 +78,21 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         },
     setup(props,{root}) {
         const tableData = reactive({
-            // item: [],
+            item: [],
             username:'',
             currentItems: []    //定义列表分页
         })
+        const data = reactive({
+            data_num:'',
+            data_podname:[]
+        })
+
+
         const dialog_info_add = ref(false)  //弹框传值
         const infoPod = ref("")
         const loading = ref(false)
+        const fullscreenLoading=ref(false)   //整页刷新
+
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
         //页码
         const total =ref(0);
@@ -98,7 +109,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             handleTableChange();
             k8slog_b();
         }
-        const k8slog_b = () => {
+        const k8slog_b = () => {     //获取所有pod名字和状态
             loading.value=true   //拼命加载
             k8slog().then((response) => {
                 let data = response.data
@@ -132,19 +143,48 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         loading.value=false    //拼命加载
         console.log('==tableChange - tableData==', tableData.currentItems);
     };
-        //catlog
+        //catlog查看log弹窗到dialog
         const Cat_Log=(pod)=>{
             infoPod.value=pod
             console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;
             }
+        //点击报错到弹窗
+        const errorNumLog=()=>{
+            openFullScreen()
+            console.log("jinlai")
+            getError().then(response=>{
+                data.data_num = response.data.data_num
+                data.data_podname = response.data.data_podname
+
+
+                // for (var er=0;er<data.data_podname.length;er++){
+                //     alert(data.data_podname[er].data_podname)
+                // }
+
+            }).cache(error =>{
+            })
+
+        }
+
+        const openFullScreen=()=>{
+        const loading = root.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+        }, 13000);
+      }
         return{
             tableData,
             k8slog_b,
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
-            dialog_info_add,infoPod,loading
+            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading
         }
     }
 }

@@ -1,18 +1,18 @@
 <template>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
 
-    <el-dialog
-            title="展示日志"
+    <el-dialog class="el-dialog__title"
+            :title="'Pod名字：'+data.pod_name"
             :visible.sync="data.dialog_info_flag"
             width="60%"
             top="5vh"
             @opened="openDialog"
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
-            :before-close="handleDialogClose">
-        <div class="pod-name">Pod名字：{{data.pod_name}}</div>
-        <br/>
+            :before-close="handleDialogClose"
 
+    >
+        <br/>
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
@@ -47,10 +47,14 @@
             dialog_info_flag: false,   //弹窗标记
             pod_log_info:"",
             pod_log_arr: [],
-            pod_name:""
+            pod_name:"",
+            podname:"",
+            yangshi_podname:""
         })
         const dialogVisible = ref(false)
         const loading = ref(false)
+        const isActive = ref(false)
+
         watch(() => {data.dialog_info_flag = props.flag   });
         const close = () => {
             data.dialog_info_flag=false;
@@ -62,6 +66,7 @@
         const getLog=()=>{
             let requestData = props.pod
             data.pod_name =requestData
+            // isActive.value =true
             console.log("deng",requestData)
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
@@ -81,23 +86,26 @@
             // loading_jiazai.value=true
             getLog()
         }
+
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
           loading
+
       }
     }
     }
 </script>
 <style scoped>
-    .pod-name {
-        font-size: 6pt;
-        color: red;
-    }
+    /*.pod-name {*/
+        /*font-size: 6pt;*/
+        /*color: red;*/
+    /*}*/
+
     .pod-content-box {
         width: 100%;
-        height: 60vh;
-        padding: 12px;
+        height: 80vh;
+        padding: 10px;
         background-color: #fff;
         border: 2px solid #eee;
         box-sizing: border-box;
@@ -120,4 +128,10 @@
         flex: 1;
 
     }
+   .el-dialog__title {
+    line-height: 24px;
+    font-size: 18px;
+    color: red;
+}
+
 </style>

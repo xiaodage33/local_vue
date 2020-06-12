@@ -1,15 +1,5 @@
 import service from "@/utils/request"
 
-//获取所有查询所有 traefik的ingress
-export function Getinfo(data){
-    return service.request({
-        method:"get",
-        url:"/__api__/trae/trae",
-        data,
-    })
-}
-
-
 //学生Student
 export function Getinfo_Stu(data){
     return service.request({
@@ -46,7 +36,7 @@ export function delinfo(data){
         data,
     })
 }
-//修改
+//修改学生信息
 export function editinfo(data){
     return service.request({
         method:"post",
@@ -55,10 +45,22 @@ export function editinfo(data){
     })
 }
 
+//公司测试系统后台运维平台
+//获取所有查询所有 traefik的ingress
+export function Getinfo(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/trae/trae",
+        data,
+    })
+}
+
+
+
 export function k8slog(data){
     return service.request({
         method:"get",
-        url:"/__api__/k8s/log",   //显示pod
+        url:"/__api__/k8s/log",   //显示所有pod名字和状态
         data,
     })
 }
@@ -66,6 +68,13 @@ export function LogInfo(data){
     return service.request({
         method:"post",
         url:"/__api__/k8s/loginfo",   //显示日志
+        data,
+    })
+}
+export function getError(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/k8s/errorlog",   //显示pod错误数量和名字
         data,
     })
 }

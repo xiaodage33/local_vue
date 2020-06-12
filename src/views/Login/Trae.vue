@@ -4,6 +4,13 @@
         <el-input v-model="tableData.username" id="username" placeholder="关键词查找ingress服务" type="mini"></el-input>
         <p  style="align:center;margin: 13px"  > <font size="5" face="arial" color="red"> Ingress 列表  </font> </p>
         <el-button type="danger" @click="getinfo"  > 查询</el-button>
+        <br/>
+        <br/>
+           <el-link type="primary"  href="http://127.0.0.1:8080/k8slog"  > 返回k8slog</el-link>
+            <br/>
+                   <el-link type="primary"  href="http://127.0.0.1:8080/login"  > 测试下学生管理</el-link>
+
+
            <el-table
         :data="tableData.currentItems"
       style="width: 100%;margin: 2px" >
