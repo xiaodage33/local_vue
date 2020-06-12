@@ -5,16 +5,23 @@
             title="展示日志"
             :visible.sync="data.dialog_info_flag"
             width="60%"
+            top="5vh"
             @opened="openDialog"
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
             :before-close="handleDialogClose">
-        <div><font size="6" color="red"> Pod名字：{{data.pod_name}} </font></div>
-        <br>
+        <div class="pod-name">Pod名字：{{data.pod_name}}</div>
+        <br/>
 
-        <textarea rows="30" cols="150">
-            {{ data.pod_log_info }}
-        </textarea> 　
+        <!--<textarea rows="30" cols="150">-->
+            <!--{{ data.pod_log_info }}-->
+        <!--</textarea> 　-->
+        <div class="pod-content-box">
+            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr">
+                <div class="pod-item-index">{{index}}</div>
+                <div class="pod-item-text">{{item}}</div>
+            </div>
+        </div>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
             <el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>
@@ -39,6 +46,7 @@
         const data = reactive({
             dialog_info_flag: false,   //弹窗标记
             pod_log_info:"",
+            pod_log_arr: [],
             pod_name:""
         })
         const dialogVisible = ref(false)
@@ -57,6 +65,10 @@
             console.log("deng",requestData)
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
+                console.log('resp',response.data.data)
+                if(data.pod_log_info) {
+                    data.pod_log_arr = data.pod_log_info.split('\n');
+                }
                 console.log("日志：",data.pod_name)
                 loading.value=false
             })
@@ -78,4 +90,34 @@
     }
 </script>
 <style scoped>
+    .pod-name {
+        font-size: 6pt;
+        color: red;
+    }
+    .pod-content-box {
+        width: 100%;
+        height: 60vh;
+        padding: 12px;
+        background-color: #fff;
+        border: 2px solid #eee;
+        box-sizing: border-box;
+        overflow-y: auto;
+    }
+    .pod-content-item {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        line-height: 2;
+    }
+    .pod-item-index {
+        width: 22px;
+        padding-right: 4px;
+        text-align: right;
+        color: #999;
+    }
+    .pod-item-text {
+        flex: 1;
+
+    }
 </style>

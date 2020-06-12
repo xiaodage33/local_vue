@@ -69,4 +69,3 @@ export function LogInfo(data){
         data,
     })
 }
-

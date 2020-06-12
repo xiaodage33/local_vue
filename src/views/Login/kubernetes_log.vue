@@ -3,7 +3,7 @@
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
         <el-badge :value="100"
-                  :class=item
+                  :class="item"
                   class="pull-left"
                   type="primary">
   <el-button size="small">现有报错pod数量</el-button>
