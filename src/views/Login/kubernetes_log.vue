@@ -3,18 +3,20 @@
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
         <el-badge :value="data.data_num"
-                  :class="item"
                   class="pull-left"
                   type="primary">
-  <el-button size="small" @click="errorNumLog">点击刷新查看 现有报错pod数量</el-button>
-
-</el-badge>
-         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left"> {{ err.data_podname }} </span>
-
+             <el-button size="small" @click="errorNumLog">点击刷新查看 现有报错pod数量速度慢</el-button>
+        </el-badge>
+        <el-badge :value="data.data_num_file"
+                  :class=""
+                   class="pull-left"
+                  type="primary">
+            <el-button size="small" @click="errorNumLogfile">查看现有报错pod数量速度较快</el-button>
+        </el-badge>
+        <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left"> {{ err.data_podname }} </span>
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
         <el-button type="danger" @click="k8slog_b"> 查询</el-button>&nbsp;
          <el-link type="primary"  href="http://192.168.9.240:8080/trae"  > 查看ingress | service </el-link>
-
         <el-table
             :data="tableData.currentItems"
              style="width: 100%;border: 5px;"
@@ -40,7 +42,7 @@
                         <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" >删除</el-button>
                         <el-button type="success" size="mini"  @click='editInfo(scope.row.id)' slot="reference" :loading="true">编辑</el-button>
                         <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod) slot="reference" >查看日志</el-button>
-                                                                                <!--scope.row.pod 可以这么传pod名字-->
+                         <!--scope.row.pod 可以这么传pod名字-->
                     </el-popconfirm>
                 </template>
             </el-table-column>
@@ -65,7 +67,7 @@
 </template>
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
-import { k8slog,LogInfo,getError } from "../../api/getinfo"
+import { k8slog,LogInfo,getError,getError_file } from "../../api/getinfo"
 import Dilog_ShowLog from "./Dilog_ShowLog.vue"
     export default {
         name: "kubernetes_log",
@@ -84,15 +86,13 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         })
         const data = reactive({
             data_num:'',
-            data_podname:[]
+            data_podname:[],
+            data_num_file:''    //文件pod取值快
         })
-
-
         const dialog_info_add = ref(false)  //弹框传值
         const infoPod = ref("")
         const loading = ref(false)
         const fullscreenLoading=ref(false)   //整页刷新
-
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
         //页码
         const total =ref(0);
@@ -116,14 +116,14 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
                 tableData.item = data.data
                 tableData.currentItems =data.data
                 handleTableChange()
-                console.log("pod", tableData.item)
+                // console.log("pod", tableData.item)
             }).cache(error => {
             })
         }
         const handleTableChange = ()=>{
-        console.log('tableChange - page', page);
+        // console.log('tableChange - page', page);
         const {item = []} = tableData;
-        console.log("测试",tableData)  //显示总条数，当前分页数量
+        // console.log("测试",tableData)  //显示总条数，当前分页数量
         const {username = ''} = tableData;
         let tempItems = item;   //所有页面列表条数
         if (username) { //如果查到了把内容塞给tempItems 重新计算长度展示
@@ -141,32 +141,35 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         }
         tableData.currentItems = currentItem;
         loading.value=false    //拼命加载
-        console.log('==tableChange - tableData==', tableData.currentItems);
+        // console.log('==tableChange - tableData==', tableData.currentItems);
     };
         //catlog查看log弹窗到dialog
         const Cat_Log=(pod)=>{
             infoPod.value=pod
-            console.log("查看pod_name",infoPod.value)
+            // console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;
             }
+        const errorNumLogfile=()=>{
+            getError_file().then(response=>{
+                data.data_num_file = response.data.data_num
+                data.data_podname = response.data.data_podname
+            }).catch(error=>{
+
+            })
+        }
         //点击报错到弹窗
         const errorNumLog=()=>{
             openFullScreen()
-            console.log("jinlai")
+            // console.log("jinlai")
             getError().then(response=>{
                 data.data_num = response.data.data_num
                 data.data_podname = response.data.data_podname
-
-
                 // for (var er=0;er<data.data_podname.length;er++){
                 //     alert(data.data_podname[er].data_podname)
                 // }
-
             }).cache(error =>{
             })
-
         }
-
         const openFullScreen=()=>{
         const loading = root.$loading({
           lock: true,
@@ -184,16 +187,11 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
-            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading
+            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading,errorNumLogfile
         }
     }
 }
 </script>
 <style scoped>
-
-.item {
-  margin-top: 10px;
-  margin-right: 40px;
-}
 
 </style>

@@ -67,14 +67,14 @@
             let requestData = props.pod
             data.pod_name =requestData
             // isActive.value =true
-            console.log("deng",requestData)
+            // console.log("deng",requestData)
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
-                console.log('resp',response.data.data)
+                // console.log('resp',response.data.data)
                 if(data.pod_log_info) {
                     data.pod_log_arr = data.pod_log_info.split('\n');
                 }
-                console.log("日志：",data.pod_name)
+                // console.log("日志：",data.pod_name)
                 loading.value=false
             })
         }

@@ -78,3 +78,10 @@ export function getError(data){
         data,
     })
 }
+export function getError_file(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/k8s/eroorlogfile",   //显示pod错误数量和名字在文件中查询不是实时那么慢
+        data,
+    })
+}
