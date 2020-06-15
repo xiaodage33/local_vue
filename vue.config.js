@@ -2,6 +2,9 @@
 
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  // 输出文件目录
+  outputDir: process.env.NODE_ENV === 'production' ? 'dist' : 'devdist',
   lintOnSave: false,
 
     css:{
@@ -14,7 +17,6 @@ module.exports = {
       }
 
     },
-
 
   devServer: {
       open: false, // 编译完成是否打开网页
