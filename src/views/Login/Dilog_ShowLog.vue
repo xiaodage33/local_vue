@@ -58,7 +58,7 @@
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag
             data.pod_log_arr ="";
-            data.pod_name = "";
+            data.pod_name = " ";
         }
         const openDialog = () => {
             getLog()   //查日志
@@ -78,8 +78,9 @@
                 loading.value=false  //。。。
             })
         }
-        const handleDialogClose=()=>{    //右上角关闭按钮
+        const handleDialogClose=()=>{ //右上角关闭按钮-重要
             data.pod_log_arr ="";
+            data.pod_name = " "
             emit("update:flag", false);
         }
         const log_flush=()=>{     //点击刷新

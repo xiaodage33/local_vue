@@ -1,38 +1,33 @@
 <template>
     <div>
-
         <el-input v-model="tableData.username" id="username" placeholder="关键词查找ingress服务" type="mini"></el-input>
         <p  style="align:center;margin: 13px"  > <font size="5" face="arial" color="red"> Ingress 列表  </font> </p>
         <el-button type="danger" @click="getinfo"  > 查询</el-button>
         <br/>
         <br/>
-           <el-link type="primary"  href="http://127.0.0.1:8080/k8slog"  > 返回k8slog</el-link>
-            <br/>
-                   <el-link type="primary"  href="http://127.0.0.1:8080/login"  > 测试下学生管理</el-link>
-
-
-           <el-table
-        :data="tableData.currentItems"
-      style="width: 100%;margin: 2px" >
+             <router-link to="k8slog"> 返回k8slog </router-link>
+         <br/>
+     <el-table
+             :data="tableData.currentItems"
+             style="width: 100%;margin: 2px">
          <el-table-column
-            type="index"
-            label="当前页编码"
-            width="180"/>
-      <el-table-column
-        prop="ingress"
-        label="当前暴露的Ingress"
-        width="180">
-      </el-table-column>
+                 type="index"
+                 label="当前页编码"
+                 width="180"/>
          <el-table-column
-            label="操作" >
-                <template slot-scope="scope">
-                    <el-button type="danger" size="mini" @click='del_message(scope.row.id)' disabled>删除</el-button>
-                    <el-button type="success" size="mini" :id="infoId" @click=editInfo(scope.row.id) disabled>编辑</el-button>
-                </template>
-                 </el-table-column>
+                 prop="ingress"
+                 label="当前暴露的Ingress"
+                 width="180">
+         </el-table-column>
+         <el-table-column
+                 label="操作">
+             <template slot-scope="scope">
+                 <el-button type="danger" size="mini" @click='del_message(scope.row.id)' disabled>删除</el-button>
+                 <el-button type="success" size="mini" :id="infoId" @click=editInfo(scope.row.id) disabled>编辑
+                 </el-button>
+             </template>
+         </el-table-column>
      </el-table>
-
-
         <!--//创建分页-->
         <el-row>
             <!--<el-col :span="12">-->
