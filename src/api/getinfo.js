@@ -1,5 +1,4 @@
 import service from "@/utils/request"
-
 //学生Student
 export function Getinfo_Stu(data){
     return service.request({
@@ -7,9 +6,7 @@ export function Getinfo_Stu(data){
         url:"/__api__/stu/index",
         data,
     })
-
 }
-
 //一个单独接口sousuo
 export function Getinfo1(data){
     return service.request({
@@ -18,9 +15,7 @@ export function Getinfo1(data){
         data,
     })
 }
-
 //添加一条数据
-
 export function addinfo(data){
     return service.request({
         method:"post",
@@ -44,7 +39,6 @@ export function editinfo(data){
         data,
     })
 }
-
 //公司测试系统后台运维平台
 //获取所有查询所有 traefik的ingress
 export function Getinfo(data){
@@ -54,9 +48,6 @@ export function Getinfo(data){
         data,
     })
 }
-
-
-
 export function k8slog(data){
     return service.request({
         method:"get",

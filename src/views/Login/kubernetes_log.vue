@@ -5,19 +5,21 @@
         <el-badge :value="data.data_num"
                   class="pull-left"
                   type="primary">
-             <el-button size="small" @click="errorNumLog" >点击刷新查看 现有报错pod数量速度慢</el-button>
+             <el-button size="small" @click="errorNumLog" >仅限scf的pod错误，速度慢</el-button>
         </el-badge>
+
         <el-badge :value="data.data_num_file"
                   :class=""
                    class="pull-left"
-                  type="primary">
-            <el-button size="small" @click="errorNumLogfile" :loading="anniuwait" >查看现有报错pod数量速度较快</el-button>
+                  type="primary"
+                    style="margin-left:10px;">
+            <el-button size="small" @click="errorNumLogfile" :loading="anniuwait_1" >查看现有报错pod数量速度较快</el-button>
         </el-badge>
         <br/><br/>
         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left">
          {{ err.data_podname }} </span>
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
-        <el-button type="danger" @click="k8slog_b" :loading="anniuwait"> 查询</el-button>&nbsp;
+        <el-button type="danger" @click="k8slog_b" :loading="anniuwait_2"> 查询</el-button>&nbsp;
          <el-link type="primary"  href="http://192.168.9.240:8080/trae"  > 查看ingress | service </el-link>
 
         <el-table
@@ -96,7 +98,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         const infoPod = ref("")
         const loading = ref(false)
         const fullscreenLoading=ref(false)   //整页刷新
-        const anniuwait = ref(false)
+        const anniuwait_1 = ref(false)
+        const anniuwait_2 = ref(false)
+
 
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
         //页码
@@ -116,13 +120,13 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         }
         const k8slog_b = () => {     //获取所有pod名字和状态
             loading.value=true   //列表页面拼命加载
-            anniuwait.value = true   //按钮不能点击
+            anniuwait_2.value = true   //按钮不能点击
             k8slog().then((response) => {
                 let data = response.data
                 tableData.item = data.data
                 tableData.currentItems =data.data
                 handleTableChange()
-                anniuwait.value = false
+                anniuwait_2.value = false
                 // console.log("pod", tableData.item)
             }).cache(error => {
             })
@@ -155,19 +159,20 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             infoPod.value=pod
             // console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;   //弹出dialog
-            anniuwait.value = false;   //按钮可以点击
+            anniuwait_1.value = false;   //按钮可以点击
             }
-        //快速弹窗找错误pod
+        //快速弹窗找错误pod文件中快
         const errorNumLogfile=()=>{
-            anniuwait.value = true
+             anniuwait_1.value = true
             getError_file().then(response=>{
                 data.data_num_file = response.data.data_num
                 data.data_podname = response.data.data_podname
+                 anniuwait_1.value=false
             }).catch(error=>{
 
             })
         }
-        //点击报错到弹窗
+        //慢速的点击报错到弹窗
         const errorNumLog=()=>{
             openFullScreen()
             // console.log("jinlai")
@@ -197,7 +202,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
             Cat_Log,
-            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading,errorNumLogfile,anniuwait
+            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading,errorNumLogfile,anniuwait_1,anniuwait_2,
         }
     }
 }
