@@ -9,9 +9,7 @@
             @opened="openDialog"
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
-            :before-close="handleDialogClose"
-
-    >
+            :before-close="handleDialogClose"  >
         <br/>
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
@@ -59,6 +57,8 @@
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag
+            data.pod_log_arr ="";
+            data.pod_name = "";
         }
         const openDialog = () => {
             getLog()   //查日志
@@ -75,10 +75,11 @@
                     data.pod_log_arr = data.pod_log_info.split('\n');
                 }
                 // console.log("日志：",data.pod_name)
-                loading.value=false
+                loading.value=false  //。。。
             })
         }
         const handleDialogClose=()=>{    //右上角关闭按钮
+            data.pod_log_arr ="";
             emit("update:flag", false);
         }
         const log_flush=()=>{     //点击刷新
@@ -86,12 +87,10 @@
             // loading_jiazai.value=true
             getLog()
         }
-
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
           loading
-
       }
     }
     }
@@ -101,7 +100,6 @@
         /*font-size: 6pt;*/
         /*color: red;*/
     /*}*/
-
     .pod-content-box {
         width: 100%;
         height: 80vh;
@@ -126,7 +124,6 @@
     }
     .pod-item-text {
         flex: 1;
-
     }
    .el-dialog__title {
     line-height: 24px;

@@ -7,8 +7,8 @@ Vue.use(VueRouter)
   const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: "k8slog",
+    // component: Home
   },
   {
     path: '/login',

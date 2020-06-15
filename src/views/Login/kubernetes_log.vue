@@ -5,7 +5,7 @@
         <el-badge :value="data.data_num"
                   class="pull-left"
                   type="primary">
-             <el-button size="small" @click="errorNumLog" >仅限scf的pod错误，速度慢</el-button>
+             <el-button size="small" @click="errorNumLog" style="font-size: 13px" >仅限scf的pod错误，速度慢</el-button>
         </el-badge>
 
         <el-badge :value="data.data_num_file"
@@ -13,15 +13,14 @@
                    class="pull-left"
                   type="primary"
                     style="margin-left:10px;">
-            <el-button size="small" @click="errorNumLogfile" :loading="anniuwait_1" >查看现有报错pod数量速度较快</el-button>
+            <el-button size="small" @click="errorNumLogfile" :loading="anniuwait_1" style="font-size: 13px" >查看现有报错pod数量速度较快</el-button>
         </el-badge>
         <br/><br/>
         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left">
          {{ err.data_podname }} </span>
-        <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字" type="mini"></el-input>
+        <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字 关键字" type="mini"></el-input>
         <el-button type="danger" @click="k8slog_b" :loading="anniuwait_2"> 查询</el-button>&nbsp;
-         <el-link type="primary"  href="http://192.168.9.240:8080/trae"  > 查看ingress | service </el-link>
-
+                <router-link to="trae">查看ingress | service</router-link>
         <el-table
             :data="tableData.currentItems"
              style="width: 100%;border: 5px;"
@@ -100,8 +99,6 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         const fullscreenLoading=ref(false)   //整页刷新
         const anniuwait_1 = ref(false)
         const anniuwait_2 = ref(false)
-
-
         const paginationPageSizes = ref([10, 20, 50, 100]);  //定义每页显示条数
         //页码
         const total =ref(0);
@@ -156,7 +153,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
     };
         //catlog查看log弹窗到dialog
         const Cat_Log=(pod)=>{
-            infoPod.value=pod
+            infoPod.value=pod;
             // console.log("查看pod_name",infoPod.value)
             dialog_info_add.value=true;   //弹出dialog
             anniuwait_1.value = false;   //按钮可以点击
@@ -169,7 +166,6 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
                 data.data_podname = response.data.data_podname
                  anniuwait_1.value=false
             }).catch(error=>{
-
             })
         }
         //慢速的点击报错到弹窗
