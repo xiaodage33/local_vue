@@ -31,7 +31,7 @@
             <el-table-column
                     prop="pod"
                     label="集群pod"
-                    width="250">
+                    width="350">
             </el-table-column>
             <el-table-column
                     prop="status"
@@ -71,8 +71,10 @@
 </template>
 <script>
 import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
-import { k8slog,LogInfo,getError,getError_file } from "../../api/getinfo"
-import Dilog_ShowLog from "./Dilog_ShowLog.vue"
+import { k8slog,LogInfo,getError,getError_file } from "../../api/getinfo";
+import { stripscript,validatePass } from "../../utils/validate";
+
+import Dilog_ShowLog from "./Dilog_ShowLog.vue";
     export default {
         name: "kubernetes_log",
         components: { Dilog_ShowLog },
@@ -132,10 +134,16 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
         // console.log('tableChange - page', page);
         const {item = []} = tableData;
         // console.log("测试",tableData)  //显示总条数，当前分页数量
-        const {username = ''} = tableData;
+
         let tempItems = item;   //所有页面列表条数
+
+        const {username = ''} = tableData;
+
         if (username) { //如果查到了把内容塞给tempItems 重新计算长度展示
-            tempItems = item.filter(i=>i.pod.indexOf(username)>-1);   //在input输入值后进入删选查找
+            let data = stripscript(username)   //过滤
+            // console.log(data)   //过滤特殊字符如 空格 等
+            tempItems = item.filter(i=>i.pod.indexOf(data)>-1);   //在input输入值后进入删选查找
+            // tempItems = item.filter(i=>i.pod.indexOf(username)>-1);   //在input输入值后进入删选查找
         }
         total.value = tempItems.length;   //如果没有输入值，查找所有的列表，有则是当前列表
         const {pageSize = paginationPageSizes[0], pageNumber = 1} = page; //显示条数和 当前页码
@@ -181,7 +189,14 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue"
             }).cache(error =>{
             })
         }
-        const openFullScreen=()=>{
+        // 打开页面自动刷现有报错从文件查
+       onMounted(() => {
+            errorNumLogfile()
+      })
+
+
+
+        const openFullScreen=()=>{     //刷新等待
         const loading = root.$loading({
           lock: true,
           text: 'Loading',

@@ -1,7 +1,7 @@
 <template>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
 
-    <el-dialog class="el-dialog__title"
+    <el-dialog class="el-dialog_title"
             :title="'Pod名字：'+data.pod_name"
             :visible.sync="data.dialog_info_flag"
             width="60%"
@@ -15,7 +15,7 @@
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
         <div class="pod-content-box">
-            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr">
+            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr"  :key="index">
                 <div class="pod-item-index">{{index}}</div>
                 <div class="pod-item-text">{{item}}</div>
             </div>
@@ -104,7 +104,7 @@
     .pod-content-box {
         width: 100%;
         height: 80vh;
-        padding: 10px;
+        padding: 5px;
         background-color: #fff;
         border: 2px solid #eee;
         box-sizing: border-box;
@@ -118,15 +118,15 @@
         line-height: 2;
     }
     .pod-item-index {
-        width: 22px;
-        padding-right: 4px;
+        width: 50px;
+        padding-right: 2px;
         text-align: right;
         color: #999;
     }
     .pod-item-text {
         flex: 1;
     }
-   .el-dialog__title {
+   .el-dialog_title {
     line-height: 24px;
     font-size: 18px;
     color: red;
