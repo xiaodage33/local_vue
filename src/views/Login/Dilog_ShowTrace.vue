@@ -1,6 +1,6 @@
 <template>
-<div>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
+
     <el-dialog class="el-dialog_title"
              :fullscreen="quanping"
             :title="'Pod名字：'+data.pod_name"
@@ -12,41 +12,76 @@
             :pod_name="data.pod_name"
             :before-close="handleDialogClose"  >
 
-        <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
-        <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
-        <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
+        <el-button class="pull-right" type="primary" @click="all_quanping" style="font-size: 5px" size="mini">全屏</el-button>
+                <el-button class="pull-right" type="primary" @click="quanpingrest" style="font-size: 5px;"  size="mini">还原全屏</el-button>
+
+        <!--<div class="pod-content-box">-->
+            <!--<div class="pod-content-item" v-for="(item,index) of data.trace_info "  :key="index">-->
+                <!--<div class="pod-item-index">{{index}}</div>-->
+                <!--<div class="pod-item-text">{{item}}-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+<div>
+
+    <!--element-loading-text="拼命加载中"   element-loading-spinner="el-icon-loading"  v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)"-->
+
+        <el-table
+            :data="data.trace_info.data"
+             style="width: 100%;border: 5px;" >
+            <el-table-column
+                    prop="traceId"
+                    label="traceId"
+                    width="350">
+            </el-table-column>
+            <el-table-column
+                    prop="kind"
+                    label="kind"
+                    width="180">
+            </el-table-column>
+              <el-table-column
+                    prop="name"
+                    label="路由"
+                    width="180">
+            </el-table-column>
+             <el-table-column
+                    prop="localEndpoint.serviceName"
+                    label="pod的服务名调用"
+                    width="180">
+            </el-table-column>
+                <el-table-column
+                    prop="tags.http.method"
+                    label="请求"
+                    width="180">
+            </el-table-column>
+
+              <el-table-column
+                    prop="tags.http.path"
+                    label="请求路由"
+                    width="180">
+            </el-table-column>
+
+        </el-table>
+
+</div>
 
 
 
-        <!--<textarea rows="30" cols="150">-->
-            <!--{{ data.pod_log_info }}-->
-        <!--</textarea> 　-->
-        <div class="pod-content-box">
-            <div class=""></div>
-            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr"  :key="index">
-                <div class="pod-item-index">{{index}}</div>
-                <div class="pod-item-text">{{item}}</div>
-            </div>
-        </div>
+
+
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
-            <el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>
+            <!--<el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>-->
         </span>
     </el-dialog>
 
-        <!--//显示错误链路-->
-     <Dilog_ShowTrace :flag.sync="dialog_show_detail"  :pod="infoPod"  />
-</div>
+
 </template>
 <script>
     import { reactive, ref, watch } from '@vue/composition-api';
-    import { LogInfo } from "../../api/getinfo";
-    import  Dilog_ShowTrace  from "./Dilog_ShowTrace";
-
+    import { getTraceId } from "../../api/getinfo";
     export default {
-        name: "Dilog_ShowLog",
-      components: { Dilog_ShowTrace },
-
+        name: "Dilog_ShowTrace",
         props: {
             flag: {
                 type: Boolean,
@@ -59,17 +94,13 @@
     setup(props,{emit,root}) {
         const data = reactive({
             dialog_info_flag: false,   //弹窗标记
-            pod_log_info:"",
-            pod_log_arr: [],
             pod_name:"",
-            podname:"",
-            yangshi_podname:""
+            trace_info : [],
+
         })
         const dialogVisible = ref(false)
         const loading = ref(false)
         const quanping = ref(false)
-        const dialog_show_detail = ref(false)  //弹框传值
-        const infoPod = ref("")   //错误的pod名字
 
 
         watch(() => {data.dialog_info_flag = props.flag   });
@@ -80,21 +111,21 @@
             data.pod_name = " ";
         }
         const openDialog = () => {
-            getLog()   //查日志
+            gettrace()   //查日志
         }
-        const getLog=()=>{
+        const gettrace=()=>{
             let requestData = props.pod
             data.pod_name =requestData
-            // isActive.value =true
-            // console.log("deng",requestData)
-            LogInfo(requestData).then(response =>{
-                data.pod_log_info = response.data.data
-                // console.log('resp',response.data.data)
-                if(data.pod_log_info) {
-                    data.pod_log_arr = data.pod_log_info.split('\n');
-                }
-                // console.log("日志：",data.pod_name)
-                loading.value=false  //。。。
+            console.log("AA",data.pod_name)
+
+            getTraceId(requestData).then(response =>{
+
+                console.log("AB",requestData)
+                data.trace_info = response.data
+                console.log("haha ",data.trace_info)
+
+
+            }).catch((error)=>{
             })
         }
         const handleDialogClose=()=>{ //右上角关闭按钮-重要
@@ -105,26 +136,19 @@
         const log_flush=()=>{     //点击刷新
             loading.value=true
             // loading_jiazai.value=true
-            getLog()
+            gettrace()
         }
-        const All_Quanping=()=>{
+        const all_quanping=()=>{
             quanping.value= true  //全屏
 
         }
-        const Quanping_Rest=()=>{
+        const quanpingrest=()=>{
             quanping.value= false   //还原全屏
         }
-        const Cat_Trace=(pod)=>{  //点击后弹开traceid页面
-            infoPod.value=pod;
-            dialog_show_detail.value=true;   //弹出dialog
-
-            }
-
-
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
-          loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,
+          loading,quanping,all_quanping,quanpingrest
       }
     }
     }

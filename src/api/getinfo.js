@@ -76,3 +76,10 @@ export function getError_file(data){
         data,
     })
 }
+export function getTraceId(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/k8s/traceid",   //显示traceId 链路
+        data,
+    })
+}

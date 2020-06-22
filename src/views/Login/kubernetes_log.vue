@@ -198,8 +198,6 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
             errorNumLogfile()
       })
 
-
-
         const openFullScreen=()=>{     //刷新等待
         const loading = root.$loading({
           lock: true,
