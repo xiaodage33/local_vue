@@ -2,6 +2,7 @@
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
 
     <el-dialog class="el-dialog_title"
+             :fullscreen="quanping"
             :title="'Pod名字：'+data.pod_name"
             :visible.sync="data.dialog_info_flag"
             width="60%"
@@ -10,7 +11,10 @@
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
             :before-close="handleDialogClose"  >
-        <br/>
+
+        <el-button class="pull-right" type="primary" @click="all_quanping" style="font-size: 5px" size="mini">全屏</el-button>
+                <el-button class="pull-right" type="primary" @click="quanpingrest" style="font-size: 5px;"  size="mini">还原</el-button>
+
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
@@ -51,7 +55,8 @@
         })
         const dialogVisible = ref(false)
         const loading = ref(false)
-        const isActive = ref(false)
+        const quanping = ref(false)
+
 
         watch(() => {data.dialog_info_flag = props.flag   });
         const close = () => {
@@ -88,10 +93,17 @@
             // loading_jiazai.value=true
             getLog()
         }
+        const all_quanping=()=>{
+            quanping.value= true  //全屏
+
+        }
+        const quanpingrest=()=>{
+            quanping.value= false   //还原全屏
+        }
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
-          loading
+          loading,quanping,all_quanping,quanpingrest
       }
     }
     }
