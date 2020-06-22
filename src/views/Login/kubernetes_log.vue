@@ -5,7 +5,7 @@
         <el-badge :value="data.data_num"
                   class="pull-left"
                   type="primary">
-             <el-button size="small" @click="errorNumLog" style="font-size: 13px" >仅限scf的pod错误，速度慢</el-button>
+             <el-button size="small" @click="errorNumLog" style="font-size: 13px;color: red" >仅限scf的pod错误，速度慢</el-button>
         </el-badge>
 
         <el-badge :value="data.data_num_file"
@@ -17,9 +17,8 @@
         </el-badge>
         <br/><br/>
         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left">
-         <!--{{ err.data_podname }}-->
-         <!--<a href="https://www.runoob.com/" target="_blank" rel="noopener noreferrer">{{ err.data_podname }} </a>-->
-            <el-button type="warning" size="mini" :title="infoPod"  @click=Cat_Log(err.data_podname) slot="reference"  style="font-size: 15px" >{{ err.data_podname }}</el-button>
+
+            <el-button type="danger" plain size="mini" :title="infoPod"  @click=Cat_Log(err.data_podname) slot="reference"  style="font-size: 15px;"  >{{ err.data_podname }}</el-button>
         </span>
 
 
