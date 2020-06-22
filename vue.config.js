@@ -29,7 +29,7 @@ module.exports = {
           '/__api__': {
               //测试集群环境
               target: "http://django-vue", //API服务器的地址  http://www.web-jshtml.cn/api
-
+              //本地环境
               // target: "http://192.168.9.240:8989", //API服务器的地址  http://www.web-jshtml.cn/api
 
               // target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api

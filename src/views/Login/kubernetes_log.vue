@@ -17,9 +17,14 @@
         </el-badge>
         <br/><br/>
         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left">
-         {{ err.data_podname }} </span>
+         <!--{{ err.data_podname }}-->
+         <!--<a href="https://www.runoob.com/" target="_blank" rel="noopener noreferrer">{{ err.data_podname }} </a>-->
+            <el-button type="warning" size="mini" :title="infoPod"  @click=Cat_Log(err.data_podname) slot="reference"  style="font-size: 15px" >{{ err.data_podname }}</el-button>
+        </span>
+
+
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字 关键字" type="mini"></el-input>
-        <el-button type="danger" @click="k8slog_b" :loading="anniuwait_2"> 查询</el-button>&nbsp;
+        <el-button type="primary" @click="k8slog_b" :loading="anniuwait_2"> 查询</el-button>&nbsp;
                 <router-link to="trae">查看ingress | service</router-link>
         <el-table
             :data="tableData.currentItems"
