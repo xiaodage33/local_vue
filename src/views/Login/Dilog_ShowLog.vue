@@ -23,10 +23,14 @@
         <!--</textarea> 　-->
         <div class="pod-content-box">
             <div class=""></div>
-            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr"  :key="index">
+            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr"
+                 :key="index">
                 <div class="pod-item-index">{{index}}</div>
-                <div class="pod-item-text">{{item}}</div>
+                <div class="pod-item-text"   v-if="item.includes('Exception')"  >  <span style="color: red;background-color: yellow" >{{item}} </span></div>
+                <div v-else class="pod-item-text">{{item}}</div>
+
             </div>
+
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
@@ -70,7 +74,7 @@
         const quanping = ref(false)
         const dialog_show_detail = ref(false)  //弹框传值
         const infoPod = ref("")   //错误的pod名字
-
+        const guanjianzi = ref("")   //关键字数据
 
         watch(() => {data.dialog_info_flag = props.flag   });
         const close = () => {
@@ -85,14 +89,30 @@
         const getLog=()=>{
             let requestData = props.pod
             data.pod_name =requestData
-            // isActive.value =true
-            // console.log("deng",requestData)
+
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
                 // console.log('resp',response.data.data)
-                if(data.pod_log_info) {
+                // console.log(str.indexOf(guanjianzi.value) !=-1)
+
+                if(data.pod_log_info){
                     data.pod_log_arr = data.pod_log_info.split('\n');
+                    // if(data.pod_log_info.indexOf(guanjianzi.value) !=-1){
+                    //     data.pod_log_arr= data.pod_log_arr.replace(/Exception/,"<span style='color: red'>Exception  </span>")
+                    // }
                 }
+
+
+                // if(data.pod_log_info) {
+                //     if(data.pod_log_info.indexOf(guanjianzi.value) !=-1){
+                //         data.pod_log_arr = data.pod_log_info.split('\n');
+                //         console.log("HAHA =>",data.pod_log_arr)
+                //     }
+                //     else {
+                //         data.pod_log_arr = data.pod_log_info.split('\n');
+                //         console.log("HAHA2222 =>",data.pod_log_arr)
+                //     }
+                // }
                 // console.log("日志：",data.pod_name)
                 loading.value=false  //。。。
             })
@@ -124,7 +144,7 @@
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
-          loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,
+          loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,guanjianzi
       }
     }
     }
