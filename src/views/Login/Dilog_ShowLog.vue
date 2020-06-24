@@ -15,18 +15,14 @@
         <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
-
-
-
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
         <div class="pod-content-box">
             <div class=""></div>
-            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr"
-                 :key="index">
-                <div class="pod-item-index">{{index}}</div>
-                <div class="pod-item-text"   v-if="item.includes('Exception')"  >  <span style="color: red;background-color: yellow" >{{item}} </span></div>
+            <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
+                <div class="pod-item-index">  {{index}}  </div>
+                <div class="pod-item-text" v-if="item.includes('Exception')"> <span style="color: red;background-color: yellow" >{{item}} </span></div>
                 <div v-else class="pod-item-text">{{item}}</div>
 
             </div>
@@ -97,25 +93,9 @@
 
                 if(data.pod_log_info){
                     data.pod_log_arr = data.pod_log_info.split('\n');
-                    // if(data.pod_log_info.indexOf(guanjianzi.value) !=-1){
-                    //     data.pod_log_arr= data.pod_log_arr.replace(/Exception/,"<span style='color: red'>Exception  </span>")
-                    // }
-                }
 
-
-                // if(data.pod_log_info) {
-                //     if(data.pod_log_info.indexOf(guanjianzi.value) !=-1){
-                //         data.pod_log_arr = data.pod_log_info.split('\n');
-                //         console.log("HAHA =>",data.pod_log_arr)
-                //     }
-                //     else {
-                //         data.pod_log_arr = data.pod_log_info.split('\n');
-                //         console.log("HAHA2222 =>",data.pod_log_arr)
-                //     }
-                // }
-                // console.log("日志：",data.pod_name)
                 loading.value=false  //。。。
-            })
+            }})
         }
         const handleDialogClose=()=>{ //右上角关闭按钮-重要
             data.pod_log_arr ="";

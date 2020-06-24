@@ -49,26 +49,25 @@
                     label="pod的服务名调用"
                     width="180">
             </el-table-column>
-                <el-table-column
-                    prop="tags.http.method"
-                    label="请求"
-                    width="180">
-            </el-table-column>
-
-              <el-table-column
-                    prop="tags.http.path"
-                    label="请求路由"
+                    <el-table-column
+                    prop="tags.http\.method"
+                    label="tags的服务名调用"
                     width="180">
             </el-table-column>
 
         </el-table>
 
+    <div v-for="(index) in data.trace_info.data">
+        <div v-for=" (value,key) in index.tags" :key="index">
+            {{ value }} ==== {{key}}
+
+        </div>
+
+    </div>
+
+
+
 </div>
-
-
-
-
-
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
             <!--<el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>-->
