@@ -35,6 +35,11 @@
                     width="350">
             </el-table-column>
             <el-table-column
+                    prop="timestamp"
+                    label="timestamp"
+                    width="180"  :formatter="dateFormat">
+            </el-table-column>
+            <el-table-column
                     prop="kind"
                     label="kind"
                     width="180">
@@ -54,31 +59,26 @@
                     label="tags的服务名调用"
                     width="180">
             </el-table-column>
+            <el-table-column prop="update_time" label="更新时间" :formatter="formatDate"/>
 
         </el-table>
-
-    <div v-for="(index) in data.trace_info.data">
-        <div v-for=" (value,key) in index.tags" :key="index">
-            {{ value }} ==== {{key}}
-
+    <div v-for="(index) in data.trace_info.data" :key="index">
+        <div v-for=" (value,keys) in index.tags" >
+            {{ value }} ==== {{keys}}
         </div>
-
     </div>
-
-
-
 </div>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
             <!--<el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>-->
         </span>
     </el-dialog>
-
-
 </template>
 <script>
     import { reactive, ref, watch } from '@vue/composition-api';
     import { getTraceId } from "../../api/getinfo";
+    import moment from 'moment'//导入文件
+      import {formatDate} from '../../utils/formattime'
     export default {
         name: "Dilog_ShowTrace",
         props: {
@@ -121,9 +121,9 @@
 
                 console.log("AB",requestData)
                 data.trace_info = response.data
-                console.log("haha ",data.trace_info)
-
-
+                // console.log("haha ",data.trace_info)
+                let nowDate=new Date()
+                console.log("时间",nowDate)
             }).catch((error)=>{
             })
         }
@@ -144,10 +144,48 @@
         const quanpingrest=()=>{
             quanping.value= false   //还原全屏
         }
+
+         const dateFormat=(row, column, cellValue, index)=>{   //格式化时间   //从el-table表中获取数据timestamp字段然后转时间unix
+                time = row.timestamp.toString()
+                let time = time.substring(0,10) *1000  //截取后没有秒10位的
+                // let time = time.substring(0,13)  //截取后没有秒13位的
+
+                // date =moment(date).format("YYYY-MM-DD");
+                // var commonTime = new Date(date*1000).Format("yyyy-MM-dd hh:mm:ss");
+                let date = new Date(time)
+
+
+                return  formatDate(date,'yyyy-MM-dd hh:mm')
+//                 const daterc = row[column.property]
+//                    if(daterc!=null){
+//                        const dateMat= new Date(parseInt(daterc.replace("/Date(", "").replace(")/", ""), 10));
+//                       const year = dateMat.getFullYear();
+//                     const month = dateMat.getMonth() + 1;
+//                     const day = dateMat.getDate();
+//                     const hh = dateMat.getHours();
+//                     const mm = dateMat.getMinutes();
+//                     const ss = dateMat.getSeconds();
+//                     const timeFormat= year + "/" + month + "/" + day + " " + hh + ":" + mm + ":" + ss;
+//                     return timeFormat;
+//                    }
+              }
+
+// const formatDate=(row, column) =>{
+//     // 获取单元格数据
+//     let data = row[column.timestamp]
+//     if (root.$MyComm.isEmpty(data)) {
+//         return ''
+//     }
+//     let dt = new Date(data)
+//     return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+// }
+
+
+
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,
-          loading,quanping,all_quanping,quanpingrest
+          loading,quanping,all_quanping,quanpingrest,dateFormat
       }
     }
     }
