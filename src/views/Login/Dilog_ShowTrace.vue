@@ -145,43 +145,13 @@
             quanping.value= false   //还原全屏
         }
 
-         const dateFormat=(row, column, cellValue, index)=>{   //格式化时间   //从el-table表中获取数据timestamp字段然后转时间unix
-                time = row.timestamp.toString()
-                let time = time.substring(0,10) *1000  //截取后没有秒10位的
-                // let time = time.substring(0,13)  //截取后没有秒13位的
-
-                // date =moment(date).format("YYYY-MM-DD");
-                // var commonTime = new Date(date*1000).Format("yyyy-MM-dd hh:mm:ss");
-                let date = new Date(time)
-
-
-                return  formatDate(date,'yyyy-MM-dd hh:mm')
-//                 const daterc = row[column.property]
-//                    if(daterc!=null){
-//                        const dateMat= new Date(parseInt(daterc.replace("/Date(", "").replace(")/", ""), 10));
-//                       const year = dateMat.getFullYear();
-//                     const month = dateMat.getMonth() + 1;
-//                     const day = dateMat.getDate();
-//                     const hh = dateMat.getHours();
-//                     const mm = dateMat.getMinutes();
-//                     const ss = dateMat.getSeconds();
-//                     const timeFormat= year + "/" + month + "/" + day + " " + hh + ":" + mm + ":" + ss;
-//                     return timeFormat;
-//                    }
-              }
-
-// const formatDate=(row, column) =>{
-//     // 获取单元格数据
-//     let data = row[column.timestamp]
-//     if (root.$MyComm.isEmpty(data)) {
-//         return ''
-//     }
-//     let dt = new Date(data)
-//     return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
-// }
-
-
-
+         const dateFormat=(row, column, cellValue, index)=> {   //格式化时间   //从el-table表中获取数据timestamp字段然后转时间unix
+             time = row.timestamp.toString()
+             let time = time.substring(0, 10) * 1000  //截取后没有秒10位的
+             // let time = time.substring(0,13)  //截取后没有秒13位的
+             let date = new Date(time)
+             return formatDate(date, 'yyyy-MM-dd hh:mm')
+         }
       return {
         dialogVisible,
           data,close,openDialog,handleDialogClose,log_flush,

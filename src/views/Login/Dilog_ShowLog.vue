@@ -11,7 +11,7 @@
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
             :before-close="handleDialogClose"  >
-
+        <el-button class="pull-left" type="primary" @click="goAnchor()" style="font-size: 5px" size="mini">查看错误首位置</el-button>
         <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
@@ -22,7 +22,9 @@
             <div class=""></div>
             <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
                 <div class="pod-item-index">  {{index}}  </div>
-                <div class="pod-item-text" v-if="item.includes('Exception')"> <span style="color: red;background-color: yellow" >{{item}} </span></div>
+                <div class="pod-item-text" v-if="item.includes('Exception')"> <span style="color: red;background-color: yellow" id="haha" >{{item}} </span></div>
+
+                <!--//判断-->
                 <div v-else class="pod-item-text">{{item}}</div>
 
             </div>
@@ -117,13 +119,16 @@
         const Cat_Trace=(pod)=>{  //点击后弹开traceid页面
             infoPod.value=pod;
             dialog_show_detail.value=true;   //弹出dialog
-
             }
-
-
+            /**锚点
+             * **/
+        const  goAnchor=()=> {
+            document.querySelector("#haha").scrollIntoView(true);
+            return document.documentElement.scrollTop
+    }
       return {
         dialogVisible,
-          data,close,openDialog,handleDialogClose,log_flush,
+          data,close,openDialog,handleDialogClose,log_flush,goAnchor,
           loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,guanjianzi
       }
     }
@@ -164,5 +169,4 @@
     font-size: 18px;
     color: red;
 }
-
 </style>
