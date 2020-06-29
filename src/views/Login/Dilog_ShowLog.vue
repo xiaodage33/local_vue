@@ -15,6 +15,13 @@
         <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
+<!--//输入查找错误关键字-->
+        <div><input type="text" v-model="keyword">
+            <div class="match-num">{{ currentIdx }} / {{ matchCount }}</div>
+            <button @click.stop="searchLast">上一个</button>
+            <button @click.stop="searchNext">下一个</button>
+        </div>
+
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
@@ -22,11 +29,19 @@
             <div class=""></div>
             <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
                 <div class="pod-item-index">  {{index}}  </div>
-                <div class="pod-item-text" v-if="item.includes('Exception')"> <span style="color: red;background-color: yellow" id="haha" >{{item}} </span></div>
-
-                <!--//判断-->
+                <div class="pod-item-text" v-if="item.includes('Exception')"><span
+                        style="color: red;background-color: yellow" id="haha">{{item}} </span>
+                    <search-highlight
+                            class="search-highlight"
+                            ref="search"
+                            @current-change="currentChange"
+                            @mactch-count-change="matchCountChange"
+                            :content="{item}.item"
+                            :keyword="keyword">
+                    </search-highlight>
+                </div>
+     <!--//判断-->
                 <div v-else class="pod-item-text">{{item}}</div>
-
             </div>
 
         </div>
@@ -41,13 +56,15 @@
 </div>
 </template>
 <script>
-    import { reactive, ref, watch } from '@vue/composition-api';
+    import { reactive, ref, watch,toRefs} from '@vue/composition-api';
     import { LogInfo } from "../../api/getinfo";
     import  Dilog_ShowTrace  from "./Dilog_ShowTrace";
+    import SearchHighlight from '../../components/2.0SearchHighlight'
+
 
     export default {
         name: "Dilog_ShowLog",
-      components: { Dilog_ShowTrace },
+      components: { Dilog_ShowTrace,SearchHighlight },
 
         props: {
             flag: {
@@ -58,7 +75,7 @@
             type: String,
             default: "" }
         },
-    setup(props,{emit,root}) {
+    setup(props,{emit,root,refs}) {
         const data = reactive({
             dialog_info_flag: false,   //弹窗标记
             pod_log_info:"",
@@ -126,8 +143,28 @@
             document.querySelector("#haha").scrollIntoView(true);
             return document.documentElement.scrollTop
     }
+
+
+    /**锚点文本搜索**/
+    const keyword =ref('')
+    const currentIdx=ref(0)
+    const matchCount=ref(0)
+
+    const searchLast =()=> {
+      refs.search.searchLast()
+    }
+    const searchNext= ()=> {
+      refs.search.searchNext()
+    }
+    const matchCountChange= (count)=> {
+      refs.matchCount = count
+    }
+    const currentChange= (idx)=> {
+      refs.currentIdx = idx
+    }
+
       return {
-        dialogVisible,
+        dialogVisible, keyword,currentIdx,matchCount,searchLast,searchNext,matchCountChange,currentChange,
           data,close,openDialog,handleDialogClose,log_flush,goAnchor,
           loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,guanjianzi
       }
