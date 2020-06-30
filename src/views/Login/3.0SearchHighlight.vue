@@ -6,8 +6,8 @@
 <script>
   import { reactive, ref, isRef, toRefs, onMounted, watch,computed } from '@vue/composition-api';
 
-const CLASS_NAME = 'search-highlight'
-export default {
+const CLASS_NAME = 'search-highlight';
+    export default {
     name:'SearchHighlight',
     setup(props, {refs, root, ref,emit}) {
         const content = reactive({
@@ -35,14 +35,14 @@ export default {
 
 
         const contentShow = computed(() => {
-            if (!root.keyword) return root.content
+            if (!root.keyword) return root.content   //???
             let reg = new RegExp(root.keyword, 'g')
             let stringList = root.content.split(reg)
-            if (!stringList.length) return this.content
+            if (!stringList.length) return root.content
             let content = ''
             for (let i = 0; i < stringList.length - 1; i++) {
-                let style = i === root.lightIndex - 1 ? root.currentStyle : root.highlightStyle
-                content += `${stringList[i]}<font style="${style}" ${CLASS_NAME}>${this.keyword}</font>`
+                let style = i === lightIndex.value - 1 ? root.currentStyle : root.highlightStyle
+                content += `${stringList[i]}<font style="${style}" ${CLASS_NAME}>${root.keyword}</font>`
             }
             content += stringList[stringList.length - 1]
             // console.log(content)  //输出查找的内容
@@ -64,14 +64,14 @@ export default {
             lightIndex: {
                 immediate: true
                    const  handler = () => {
-                        emit('current-change', root.lightIndex)
+                        emit('current-change', lightIndex.value)
                     }
             }
             ;
             matchCount: {
                 immediate: true
                    const  handler = () => {
-                        emit('mactch-count-change', root.matchCount)
+                        emit('mactch-count-change', matchCount.value)
                     }
             }})
 
@@ -79,7 +79,7 @@ export default {
       root.$nextTick=(() => {
         let list = root.$el.querySelectorAll(`font[${CLASS_NAME}]`)
         if (list[index - 1]) {
-          root.lightIndex = index
+          lightIndex.value = index
           list[index - 1].scrollIntoView()
         }
       })
@@ -88,14 +88,14 @@ export default {
             alert(sssss)
       root.$nextTick(() => {
 
-        let idx = root.lightIndex >= root.matchCount ? 1 : root.lightIndex + 1
+        let idx = lightIndex.value >= root.matchCount ? 1 : lightIndex.value + 1
         root.scrollTo(idx)
           alert(22)
       })
     }
    const searchLast= ()=> {
       root.$nextTick=(() => {
-        let idx = root.lightIndex <= 1 ? root.matchCount : root.lightIndex - 1
+        let idx = lightIndex.value <= 1 ? root.matchCount : lightIndex.value - 1
         root.scrollTo(idx)
       })
     }
@@ -103,9 +103,9 @@ export default {
             alert(156)
       root.$nextTick=(() => {
         let list = root.$el.querySelectorAll(`font[${CLASS_NAME}]`)
-        root.matchCount = list.length
-        root.lightIndex = root.matchCount ? 1 : 0
-        root.scrollTo(root.lightIndex)
+        matchCount.value = list.length
+        lightIndex.value = matchCount.value ? 1 : 0
+        root.scrollTo(lightIndex.value)
       })
     }
 

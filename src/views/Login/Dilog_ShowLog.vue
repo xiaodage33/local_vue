@@ -21,7 +21,6 @@
             <button @click.stop="searchLast">上一个</button>
             <button @click.stop="searchNext">下一个</button>
         </div>
-
         <!--<textarea rows="30" cols="150">-->
             <!--{{ data.pod_log_info }}-->
         <!--</textarea> 　-->
@@ -65,7 +64,6 @@
     export default {
         name: "Dilog_ShowLog",
       components: { Dilog_ShowTrace,SearchHighlight },
-
         props: {
             flag: {
                 type: Boolean,
@@ -104,7 +102,6 @@
         const getLog=()=>{
             let requestData = props.pod
             data.pod_name =requestData
-
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
                 // console.log('resp',response.data.data)
