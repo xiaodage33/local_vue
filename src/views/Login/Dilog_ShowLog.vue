@@ -11,19 +11,18 @@
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
             :before-close="handleDialogClose"  >
-        <el-button class="pull-left" type="primary" @click="exceptionPrev()" style="font-size: 5px" size="mini">上一个</el-button>
-        <el-button class="pull-left" type="primary" @click="exceptionNext()" style="font-size: 5px" size="mini">下一个</el-button>
+        <el-button class="pull-left" type="primary" @click="scrollTo(-1)" style="font-size: 5px" size="mini">上一个异常</el-button>
+        <el-button class="pull-left" type="primary" @click="scrollTo(1)" style="font-size: 5px" size="mini">下一个异常</el-button>
         <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
 <!--//输入查找错误关键字-->
-        <div class="pod-content-box">
+        <div ref="messageBox" class="pod-content-box">
             <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
                 <div class="pod-item-index">{{index}}</div>
-                <div v-if="item.includes('Exception')" class="pod-item-text pod-item-text-color">{{item}}</div>
+                <div ref="exception" v-if="item.includes('Exception')" class="pod-item-text pod-item-text-color">{{item}}</div>
                 <div v-else class="pod-item-text">{{item}}</div>
             </div>
-
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="close">关闭</el-button>
@@ -114,64 +113,25 @@
             infoPod.value=pod;
             dialog_show_detail.value=true;   //弹出dialog
             }
-        const getExceptionElement=()=>{
+        const scrollTo=(value)=>{
             if(exceptionList.value.length === 0) {
-                exceptionList.value = root.$el.querySelectorAll('div[class="pod-item-text pod-item-text-color"]')
+                exceptionList.value = refs.exception
             }
-            return exceptionList.value
-        }
-        const exceptionPrev=()=>{
-            const exceptionList = getExceptionElement();
-            if (exceptionList.length === 0) {
+            if (exceptionList.value.length === 0) {
                 return
             }
-            if (!currentException.value && currentException.value !== 0) {
-                const resIndex = 0;
-                const resEle = exceptionList[resIndex]
-                scrollTo(resEle,resIndex)
-                return
-            }
-            if (currentException.value <= 0) {
-                return
-            } else {
-                const resIndex = currentException.value - 1;
-                const resEle = exceptionList[resIndex]
-                scrollTo(resEle, resIndex)
+            let resIndex = !currentException.value && currentException.value !== 0 ? 0 : currentException.value + value;
+            const resEle = exceptionList.value[resIndex]
+            if (resEle) {
+                // console.log(resEle.clientHeight)
+                resEle.scrollIntoView({behavior: "smooth",block:"center"})
+                // refs.messageBox.scrollTop = resEle.offsetTop - resEle.clientHeight*2
+                currentException.value = resIndex
             }
         }
-        const exceptionNext=()=>{
-            const exceptionList = getExceptionElement();
-            if (exceptionList.length === 0) {
-                return
-            }
-            if (!currentException.value && currentException.value !== 0) {
-                console.log('next-currentExc', currentException.value)
-                const resIndex = 0;
-                const resEle = exceptionList[resIndex]
-                scrollTo(resEle,resIndex)
-                return
-            }
-            if (currentException.value >= exceptionList.length - 1) {
-                return
-            } else {
-                const resIndex = currentException.value + 1;
-                const resEle = exceptionList[resIndex]
-                scrollTo(resEle,resIndex)
-            }
-        }
-        const scrollTo=(ele, resIndex)=>{
-            ele.scrollIntoView()
-            currentException.value = resIndex
-        }
-            /**锚点
-             * **/
-        const  goAnchor=()=> {
-            document.querySelector("#haha").scrollIntoView(true);
-            return document.documentElement.scrollTop
-    }
       return {
         dialogVisible,
-          data,close,openDialog,handleDialogClose,log_flush,goAnchor,exceptionNext, exceptionPrev,
+          data,close,openDialog,handleDialogClose,log_flush,scrollTo,
           loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,guanjianzi
       }
     }
@@ -215,5 +175,5 @@
     line-height: 24px;
     font-size: 18px;
     color: red;
-}
+    }
 </style>
