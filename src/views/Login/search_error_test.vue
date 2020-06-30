@@ -46,7 +46,7 @@ export default {
       keyword: '',
       currentIdx: 0,
       matchCount: 0,
-      title:'',
+      type_num:'',
         content:
             `
             春江花月夜
@@ -91,37 +91,29 @@ export default {
 
             if(res.status === 200){
                 that.content = res.data.data
-                console.log("that.content=",that.content)
+                // console.log("that.content=",that.content)
                 for(let i=0;i< that.content.length;i++){
                     // console.log("循环===",i)
                     // console.log("循环222",that.content[i].pod)
                     // console.log("什么对象",typeof(that.content[i].pod))
                     content_item.push(that.content[i].pod)
+
                     // console.log("content_item- push 后",content_item)
                 }
                 that.content = content_item
                 console.log("这是数组",that.content)
+                // that.content = that.content.join("\n")
                 that.content = that.content.join("\n")
+
                 console.log("转换后字符串==：",that.content)
-
-
             }else{
                 alert("error")
             }
-
         })
-
-
-
       },
-
-
   },
-
-
 }
 </script>
-
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -135,7 +127,6 @@ body {
   margin: 0;
 }
 </style>
-
 <style>
 .container {
   max-width: 30rem;

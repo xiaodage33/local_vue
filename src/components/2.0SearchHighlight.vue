@@ -34,23 +34,15 @@ export default {
       matchCount: 0
     }
   },
+
+    //    123456789   keyword->3
+    // ['12','456789']
+    // 12<font>3</font>456789
+
+
   computed: {    //这个监听是筛选实时
     contentShow () {
       console.log("this.keyword==",this.keyword)  //事件监听实时更新输入内容查找
-
-       //  if(this.content){
-       //      console.log("bbbb12")
-       //      for(let j=0;j <= this.content.length;j++){
-       //          console.log("哈哈bbb",this.content.item[j])
-       //          console.log("得到值",this.content[0].pod)
-       //          content.push(this.content.item[j].pod)
-       //      }
-       //      console.log("bbbb99=",this.content)
-       //
-       //  }
-       // console.log("bbb==",this.content.item)
-
-
       if (!this.keyword) return this.content
       let reg = new RegExp(this.keyword, 'g') //g表示全局
         // console.log("haha==",this.content)    //所有的列表输出
@@ -64,6 +56,8 @@ export default {
           let style = i === this.lightIndex - 1 ? this.currentStyle : this.highlightStyle
           // console.log("sytle==", style) //搜索到的加背景
           content += `${stringList[i]}<font style="${style}" ${CLASS_NAME}>${this.keyword}</font>`
+          // <font style="" search-highlight>sdfsdfdsf</font>
+          // <font style="background: #ff9632" search-highlight="">fbss</font>
           // console.log("110==", content)  //输出<font style="background: #ff9632" search-highlight>django</font>
       }
       content += stringList[stringList.length - 1]
@@ -95,7 +89,7 @@ export default {
   methods: {
     scrollTo (index) {
       this.$nextTick(() => {
-        let list = this.$el.querySelectorAll(`font[${CLASS_NAME}]`)
+        let list = this.$el.querySelectorAll(`font[${CLASS_NAME}]`) //html5 -> js
           // console.log("list==",list)  //筛选了几个
         if (list[index - 1]) {
           this.lightIndex = index
@@ -121,25 +115,11 @@ export default {
     },
     getMatchCount () {
       this.$nextTick(() => {
-          // console.log("aaa==",this.content)
-          // if (this.content) {
-          //     console.log("aaaaaa12",this.content.pod)
-          //     for (let j = 0; j <= this.content.length; j++) {
-          //         console.log("哈哈", this.content[j].pod)
-          //
-          //         this.content=this.content.push(this.content[j].pod)
-          //     }
-          //     console.log("999=", this.content)
-          //
-          // }
-          // console.log("aaa==",this.content)
-
-
-
-        console.log("this.$nextTick这个方法")
+         console.log("this.$nextTick这个方法")
 
         let list = this.$el.querySelectorAll(`font[${CLASS_NAME}]`)
-          console.log("getMatchCount这个方法搜到到几个==",list) //监听部分取值搜索
+
+        console.log("getMatchCount这个方法搜到到几个==",list) //监听部分取值搜索
         this.matchCount = list.length
         this.lightIndex = this.matchCount ? 1 : 0
         this.scrollTo(this.lightIndex)

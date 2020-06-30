@@ -11,35 +11,16 @@
             :pod="data.pod_log_info"
             :pod_name="data.pod_name"
             :before-close="handleDialogClose"  >
-        <el-button class="pull-left" type="primary" @click="goAnchor()" style="font-size: 5px" size="mini">查看错误首位置</el-button>
+        <el-button class="pull-left" type="primary" @click="exceptionPrev()" style="font-size: 5px" size="mini">上一个</el-button>
+        <el-button class="pull-left" type="primary" @click="exceptionNext()" style="font-size: 5px" size="mini">下一个</el-button>
         <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right" type="primary" :title="infoPod" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini">查看链路</el-button>
 <!--//输入查找错误关键字-->
-        <div><input type="text" v-model="keyword">
-            <div class="match-num">{{ currentIdx }} / {{ matchCount }}</div>
-            <button @click.stop="searchLast">上一个</button>
-            <button @click.stop="searchNext">下一个</button>
-        </div>
-        <!--<textarea rows="30" cols="150">-->
-            <!--{{ data.pod_log_info }}-->
-        <!--</textarea> 　-->
         <div class="pod-content-box">
-            <div class=""></div>
             <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
-                <div class="pod-item-index">  {{index}}  </div>
-                <div class="pod-item-text" v-if="item.includes('Exception')"><span
-                        style="color: red;background-color: yellow" id="haha">{{item}} </span>
-                    <search-highlight
-                            class="search-highlight"
-                            ref="search"
-                            @current-change="currentChange"
-                            @mactch-count-change="matchCountChange"
-                            :content="{item}.item"
-                            :keyword="keyword">
-                    </search-highlight>
-                </div>
-     <!--//判断-->
+                <div class="pod-item-index">{{index}}</div>
+                <div v-if="item.includes('Exception')" class="pod-item-text pod-item-text-color">{{item}}</div>
                 <div v-else class="pod-item-text">{{item}}</div>
             </div>
 
@@ -58,12 +39,10 @@
     import { reactive, ref, watch,toRefs} from '@vue/composition-api';
     import { LogInfo } from "../../api/getinfo";
     import  Dilog_ShowTrace  from "./Dilog_ShowTrace";
-    import SearchHighlight from '../../components/2.0SearchHighlight'
-
 
     export default {
         name: "Dilog_ShowLog",
-      components: { Dilog_ShowTrace,SearchHighlight },
+      components: { Dilog_ShowTrace },
         props: {
             flag: {
                 type: Boolean,
@@ -88,6 +67,8 @@
         const dialog_show_detail = ref(false)  //弹框传值
         const infoPod = ref("")   //错误的pod名字
         const guanjianzi = ref("")   //关键字数据
+        const exceptionList = ref([])
+        const currentException = ref('')
 
         watch(() => {data.dialog_info_flag = props.flag   });
         const close = () => {
@@ -109,7 +90,6 @@
 
                 if(data.pod_log_info){
                     data.pod_log_arr = data.pod_log_info.split('\n');
-
                 loading.value=false  //。。。
             }})
         }
@@ -134,35 +114,64 @@
             infoPod.value=pod;
             dialog_show_detail.value=true;   //弹出dialog
             }
+        const getExceptionElement=()=>{
+            if(exceptionList.value.length === 0) {
+                exceptionList.value = root.$el.querySelectorAll('div[class="pod-item-text pod-item-text-color"]')
+            }
+            return exceptionList.value
+        }
+        const exceptionPrev=()=>{
+            const exceptionList = getExceptionElement();
+            if (exceptionList.length === 0) {
+                return
+            }
+            if (!currentException.value && currentException.value !== 0) {
+                const resIndex = 0;
+                const resEle = exceptionList[resIndex]
+                scrollTo(resEle,resIndex)
+                return
+            }
+            if (currentException.value <= 0) {
+                return
+            } else {
+                const resIndex = currentException.value - 1;
+                const resEle = exceptionList[resIndex]
+                scrollTo(resEle, resIndex)
+            }
+        }
+        const exceptionNext=()=>{
+            const exceptionList = getExceptionElement();
+            if (exceptionList.length === 0) {
+                return
+            }
+            if (!currentException.value && currentException.value !== 0) {
+                console.log('next-currentExc', currentException.value)
+                const resIndex = 0;
+                const resEle = exceptionList[resIndex]
+                scrollTo(resEle,resIndex)
+                return
+            }
+            if (currentException.value >= exceptionList.length - 1) {
+                return
+            } else {
+                const resIndex = currentException.value + 1;
+                const resEle = exceptionList[resIndex]
+                scrollTo(resEle,resIndex)
+            }
+        }
+        const scrollTo=(ele, resIndex)=>{
+            ele.scrollIntoView()
+            currentException.value = resIndex
+        }
             /**锚点
              * **/
         const  goAnchor=()=> {
             document.querySelector("#haha").scrollIntoView(true);
             return document.documentElement.scrollTop
     }
-
-
-    /**锚点文本搜索**/
-    const keyword =ref('')
-    const currentIdx=ref(0)
-    const matchCount=ref(0)
-
-    const searchLast =()=> {
-      refs.search.searchLast()
-    }
-    const searchNext= ()=> {
-      refs.search.searchNext()
-    }
-    const matchCountChange= (count)=> {
-      refs.matchCount = count
-    }
-    const currentChange= (idx)=> {
-      refs.currentIdx = idx
-    }
-
       return {
-        dialogVisible, keyword,currentIdx,matchCount,searchLast,searchNext,matchCountChange,currentChange,
-          data,close,openDialog,handleDialogClose,log_flush,goAnchor,
+        dialogVisible,
+          data,close,openDialog,handleDialogClose,log_flush,goAnchor,exceptionNext, exceptionPrev,
           loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,infoPod,guanjianzi
       }
     }
@@ -197,6 +206,10 @@
     }
     .pod-item-text {
         flex: 1;
+    }
+    .pod-item-text-color {
+        color: red;
+        background-color: yellow;
     }
    .el-dialog_title {
     line-height: 24px;
