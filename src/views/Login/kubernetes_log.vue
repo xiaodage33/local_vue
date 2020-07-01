@@ -18,7 +18,7 @@
         <br/><br/>
         <span v-for="err in data.data_podname" style="color:red ;padding: 0.1cm;margin-left:10px"  class="pull-left">
 
-            <el-button type="danger" plain size="mini" :title="infoPod"  @click=Cat_Log(err.data_podname) slot="reference"  style="font-size: 15px;"  >{{ err.data_podname }}</el-button>
+            <el-button type="danger" plain size="mini" :title="infoPod"    @click=Cat_Log(err.data_podname) slot="reference"  style="font-size: 15px;"  >{{ err.data_podname }}</el-button>
         </span>
 
 

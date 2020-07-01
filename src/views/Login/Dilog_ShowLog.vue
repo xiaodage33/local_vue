@@ -2,7 +2,7 @@
 <div>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
     <el-dialog class="el-dialog__headerbtn" btn-vvue
-             :fullscreen="quanping"
+             :fullscreen="true"
             :visible.sync="data.dialog_info_flag"
             width="60%"
             top="5vh"
@@ -21,7 +21,7 @@
         </el-select>
 
 
-        <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏</el-button>
+        <el-button class="pull-right" type="primary" @click="All_Quanping"  style="font-size: 5px" size="mini">全屏</el-button>
         <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
         <el-button class="pull-right"  type="primary" @click="log_flush" v-loading="loading" style="font-size: 5px;"  size="mini">刷新</el-button>
 
@@ -76,7 +76,7 @@
 
         const dialogVisible = ref(false)
         const loading = ref(false)
-        const quanping = ref(true)    //全屏默认true
+        const quanping = ref(false)    //全屏默认true
         const dialog_show_detail = ref(false)  //弹框传值
         // const infoPod = ref("")   //错误的pod名字
         const guanjianzi = ref("")   //关键字数据
@@ -120,12 +120,13 @@
             loading.value=true
             getLog()
             scrollTo()
+            handleBlur()
         }
         const All_Quanping=()=>{
-            quanping.value= true  //全屏
+            quanping.value= false  //全屏
         }
         const Quanping_Rest=()=>{
-            quanping.value= false   //还原全屏
+            quanping.value= true   //false 小 还原全屏
         }
         const Cat_Trace=(pod)=>{  //点击后弹开traceid页面
             // infoPod.value=pod;
@@ -135,7 +136,8 @@
             if(exceptionList.value.length === 0) {  //第一次数组就是空 0
                 // console.log("data.exceptionList===",data.exceptionList)
                 exceptionList.value = refs.exception
-                // console.log("给赋值exceptionList.value",data.exceptionList)  //利用refs 给赋值别名为 exception这个数组
+                console.log("给赋值了exceptionList.value",exceptionList.value)  //利用refs 给赋值别名为 exception这个数组
+
             }
             if (exceptionList.value.length === 0) {    //判断赋值后数组是否为空
                 alert("没有错误关关键字")
