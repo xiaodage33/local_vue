@@ -165,21 +165,21 @@
         }
         const handleBlur=(sele)=>{
             console.log("jinlai")
-            exceptionList.value = refs.exception
-            data.options = exceptionList.value
-              if (sele) {
-                const resEle = exceptionList.value[sele]
-                resEle.scrollIntoView()
-                currentException.value = sele  //当前位置
-                if(currentException.value +1 >= exceptionList.value.length){
-                    up_scrollTo_down.value = true
-                }else if(currentException.value <1){
-                    up_scrollTo.value = true
-                }else{
-                    up_scrollTo.value=false
-                    up_scrollTo_down.value=false
-                }
-            }
+            // exceptionList.value = refs.exception
+            // data.options = exceptionList.value
+            //   if (sele) {
+            //     const resEle = exceptionList.value[sele]
+            //     resEle.scrollIntoView()
+            //     currentException.value = sele  //当前位置
+            //     if(currentException.value +1 >= exceptionList.value.length){
+            //         up_scrollTo_down.value = true
+            //     }else if(currentException.value <1){
+            //         up_scrollTo.value = true
+            //     }else{
+            //         up_scrollTo.value=false
+            //         up_scrollTo_down.value=false
+            //     }
+            // }
 
         }
       return {
