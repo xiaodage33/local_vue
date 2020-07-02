@@ -24,10 +24,9 @@
                     :value="index+1">
             </el-option>
         </el-select>
-        <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏
-        </el-button>
-        <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;" size="mini">还原
-        </el-button>
+        <!--<el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏-->
+        <!--</el-button>-->
+
         <el-button class="pull-right" type="primary" @click="log_flush" v-loading="loading" style="font-size: 5px;"
                    size="mini">刷新
         </el-button>
@@ -233,5 +232,5 @@
     }
 </style>
 <style>
-    .el-dialog__headerbtn{position:absolute;top:3px;right:20px;padding-bottom: 3px;background:0 0;border:none;outline:0;cursor:pointer;font-size:30px}
+    .el-dialog__headerbtn{position:absolute;top:3px;right:2px;padding-bottom: 3px;background:0 0;border:none;outline:0;cursor:pointer;font-size:30px}
     </style>
