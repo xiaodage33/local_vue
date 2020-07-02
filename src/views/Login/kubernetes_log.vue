@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
                <!--</div>-->
         <el-badge :value="data.data_num"

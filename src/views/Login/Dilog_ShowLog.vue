@@ -2,45 +2,53 @@
 <div>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
     <el-dialog class="el-dialog__headerbtn" btn-vvue
-             :fullscreen="true"
-            :visible.sync="data.dialog_info_flag"
-            width="60%"
-            top="5vh"
-            @opened="openDialog"
-            :pod="data.pod_log_info"
-            :pod_name="data.pod_name"
-            :before-close="handleDialogClose"  >
-        <el-button class="pull-left" type="primary" @click="scrollTo(-1)" style="font-size: 5px" size="mini" :disabled="up_scrollTo" >上一个异常</el-button>
-        <el-button class="pull-left" type="primary" @click="scrollTo(1)" style="font-size: 5px" size="mini" :disabled="up_scrollTo_down">下一个异常</el-button>
-
-        <el-select style="padding-left: 10px;" class="pull-left" v-model=" data.sel_id  "    @change="handleBlur" clearable placeholder="请选择第几个错误位置" size="mini">
+               :fullscreen="true"
+               :visible.sync="data.dialog_info_flag"
+               width="60%"
+               top="5vh"
+               @opened="openDialog"
+               :pod="data.pod_log_info"
+               :pod_name="data.pod_name"
+               :before-close="handleDialogClose">
+        <el-button class="pull-left" type="primary" @click="scrollTo(-1)" style="font-size: 5px" size="mini"
+                   :disabled="up_scrollTo">上一个异常
+        </el-button>
+        <el-button class="pull-left" type="primary" @click="scrollTo(1)" style="font-size: 5px" size="mini"
+                   :disabled="up_scrollTo_down">下一个异常
+        </el-button>
+        <!--//选择器-->
+        <el-select style="padding-left: 10px;" class="pull-left" v-model=" data.sel_id  " @change="handleBlur" clearable
+                   placeholder="请选择第几个错误位置" size="mini">
             <el-option
                     v-for="(item,index) in data.options" :key="index"
-                    :value="index"  >
+                    :value="index+1">
             </el-option>
         </el-select>
+        <el-button class="pull-right" type="primary" @click="All_Quanping" style="font-size: 5px" size="mini">全屏
+        </el-button>
+        <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;" size="mini">还原
+        </el-button>
+        <el-button class="pull-right" type="primary" @click="log_flush" v-loading="loading" style="font-size: 5px;"
+                   size="mini">刷新
+        </el-button>
 
-
-        <el-button class="pull-right" type="primary" @click="All_Quanping"  style="font-size: 5px" size="mini">全屏</el-button>
-        <el-button class="pull-right" type="primary" @click="Quanping_Rest" style="font-size: 5px;"  size="mini">还原</el-button>
-        <el-button class="pull-right"  type="primary" @click="log_flush" v-loading="loading" style="font-size: 5px;"  size="mini">刷新</el-button>
-
-        <el-button class="pull-right" type="primary"  @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"  size="mini" v-show="false">查看链路</el-button>
-<!--//输入查找错误关键字-->
+        <el-button class="pull-right" type="primary" @click="Cat_Trace(data.pod_name)" style="font-size: 5px;"
+                   size="mini" v-show="false">查看链路
+        </el-button>
+        <!--//输入查找错误关键字-->
         <div ref="messageBox" class="pod-content-box">
             <div class="pod-content-item" v-for="(item,index) of data.pod_log_arr" :key="index">
                 <div class="pod-item-index">{{index}}</div>
-                <div ref="exception" v-if="item.includes('Exception')" class="pod-item-text pod-item-text-color">{{item}}</div>
+                <div ref="exception" v-if="item.includes('Exception:')" class="pod-item-text pod-item-text-color">
+                    {{item}}
+                </div>
                 <div v-else class="pod-item-text">{{item}}</div>
             </div>
         </div>
-        <!--<span slot="footer" class="dialog-footer">-->
-            <!--<el-button type="primary" @click="close">关闭</el-button>-->
-            <!--<el-button type="primary" @click="log_flush" v-loading="loading">刷新</el-button>-->
-        <!--</span>-->
+
     </el-dialog>
-        <!--//显示错误链路-->
-     <!--<Dilog_ShowTrace :flag.sync="dialog_show_detail"  :pod="infoPod"  />-->
+    <!--//显示错误链路-->
+    <!--<Dilog_ShowTrace :flag.sync="dialog_show_detail"  :pod="infoPod"  />-->
 </div>
 </template>
 <script>
@@ -73,7 +81,6 @@
             options:[],
             sel_id:'',
         })
-
         const dialogVisible = ref(false)
         const loading = ref(false)
         const quanping = ref(false)    //全屏默认true
@@ -84,18 +91,18 @@
         const exceptionList =ref([])
         const currentException =ref("")
 
-
-        const up_scrollTo = ref(false)   //是否可以点击false是可以点击
+        const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击
         const up_scrollTo_down = ref(false)
-
         watch(() => {data.dialog_info_flag = props.flag });
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag
             data.pod_log_arr ="";
             data.pod_name = " ";
+
         }
         const openDialog = () => {  //弹开后立即执行查日志
+
             getLog()
             handleBlur(0)
         }
@@ -104,8 +111,6 @@
             data.pod_name =requestData
             LogInfo(requestData).then(response =>{
                 data.pod_log_info = response.data.data
-                // console.log('resp',response.data.data)
-                // console.log(str.indexOf(guanjianzi.value) !=-1)
                 if(data.pod_log_info){
                     data.pod_log_arr = data.pod_log_info.split('\n');
                 loading.value=false  //。。。
@@ -136,7 +141,8 @@
             if(exceptionList.value.length === 0) {  //第一次数组就是空 0
                 // console.log("data.exceptionList===",data.exceptionList)
                 exceptionList.value = refs.exception
-                console.log("给赋值了exceptionList.value",exceptionList.value)  //利用refs 给赋值别名为 exception这个数组
+                data.options = exceptionList.value
+                // console.log("给赋值了exceptionList.value",exceptionList.value)  //利用refs 给赋值别名为 exception这个数组
 
             }
             if (exceptionList.value.length === 0) {    //判断赋值后数组是否为空
@@ -164,22 +170,23 @@
             }
         }
         const handleBlur=(sele)=>{
-            console.log("jinlai")
+            console.log("handlerBlur",sele)
+            // console.log("sele",sele)
             // exceptionList.value = refs.exception
             // data.options = exceptionList.value
-            //   if (sele) {
-            //     const resEle = exceptionList.value[sele]
-            //     resEle.scrollIntoView()
-            //     currentException.value = sele  //当前位置
-            //     if(currentException.value +1 >= exceptionList.value.length){
-            //         up_scrollTo_down.value = true
-            //     }else if(currentException.value <1){
-            //         up_scrollTo.value = true
-            //     }else{
-            //         up_scrollTo.value=false
-            //         up_scrollTo_down.value=false
-            //     }
-            // }
+              if (sele) {
+                const resEle = exceptionList.value[sele-1]
+                resEle.scrollIntoView()
+                currentException.value = sele  //当前位置
+                if(currentException.value  >= exceptionList.value.length){
+                    up_scrollTo_down.value = true
+                }else if(currentException.value <= 1){
+                    up_scrollTo.value = true
+                }else{
+                    up_scrollTo.value=false
+                    up_scrollTo_down.value=false   //可以点击
+                }
+            }
 
         }
       return {
@@ -226,5 +233,5 @@
     }
 </style>
 <style>
-    .el-dialog__headerbtn{position:absolute;top:5px;right:20px;padding:0;background:0 0;border:none;outline:0;cursor:pointer;font-size:30px}
+    .el-dialog__headerbtn{position:absolute;top:3px;right:20px;padding-bottom: 3px;background:0 0;border:none;outline:0;cursor:pointer;font-size:30px}
     </style>
