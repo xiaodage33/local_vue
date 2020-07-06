@@ -101,7 +101,7 @@
         }
         const openDialog = () => {  //弹开后立即执行查日志
             getLog()
-            handleBlur(1)
+
         }
         const getLog=()=>{
             let requestData = props.pod
@@ -122,7 +122,7 @@
             loading.value=true
             getLog()
             scrollTo()
-            handleBlur()
+
         }
         const All_Quanping=()=>{
             quanping.value= false  //全屏
@@ -167,7 +167,7 @@
             }
         }
         const handleBlur=(sele)=>{
-            exceptionList.value[sele].scrollIntoView()
+            exceptionList.value[sele-1].scrollIntoView()
         }
         return {
         dialogVisible,
