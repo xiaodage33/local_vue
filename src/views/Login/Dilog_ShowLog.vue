@@ -10,14 +10,14 @@
                :pod="data.pod_log_info"
                :pod_name="data.pod_name"
                :before-close="handleDialogClose">
-        <el-button class="pull-left" type="primary" @click="scrollTo(-1)" style="font-size: 5px" size="mini"
+        <el-button class="pull-left" type="primary" :plain="true" @click="scrollTo(-1)" style="font-size: 5px" size="mini"
                    :disabled="up_scrollTo">上一个异常
         </el-button>
-        <el-button class="pull-left" type="primary" @click="scrollTo(1)" style="font-size: 5px" size="mini"
+        <el-button class="pull-left" type="primary" :plain="true"  @click="scrollTo(1)" style="font-size: 5px" size="mini"
                    :disabled="up_scrollTo_down">下一个异常
         </el-button>
         <!--//选择器-->
-        <el-select style="padding-left: 10px;" class="pull-left" v-model=" data.sel_id  " @change="handleBlur" clearable
+        <el-select style="padding-left: 10px;" class="pull-left" v-model="data.sel_id"  @change="handleBlur" clearable
                    placeholder="请选择第几个错误位置" size="mini">
             <el-option
                     v-for="(item,index) in data.options" :key="index"
@@ -143,7 +143,9 @@
                 // console.log("给赋值了exceptionList.value",exceptionList.value)  //利用refs 给赋值别名为 exception这个数组
             }
             if (exceptionList.value.length === 0) {    //判断赋值后数组是否为空
-                alert("没有错误关关键字")
+                root.$message({
+                        message: "没有找到错误点~_~!!!",
+                        type: "success"})
                 return
             }
             let resIndex = !currentException.value && currentException.value !== 0 ? 0 : currentException.value + value;  //三目运算
