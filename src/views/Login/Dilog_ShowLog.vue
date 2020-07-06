@@ -98,12 +98,10 @@
             emit("update:flag", false);   //emit更新prop flag
             data.pod_log_arr ="";
             data.pod_name = " ";
-
         }
         const openDialog = () => {  //弹开后立即执行查日志
-
             getLog()
-            handleBlur(0)
+            handleBlur(1)
         }
         const getLog=()=>{
             let requestData = props.pod
@@ -137,12 +135,12 @@
             dialog_show_detail.value=true;   //弹出dialog
             }
         const scrollTo=(value)=>{
+
             if(exceptionList.value.length === 0) {  //第一次数组就是空 0
                 // console.log("data.exceptionList===",data.exceptionList)
                 exceptionList.value = refs.exception
                 data.options = exceptionList.value
                 // console.log("给赋值了exceptionList.value",exceptionList.value)  //利用refs 给赋值别名为 exception这个数组
-
             }
             if (exceptionList.value.length === 0) {    //判断赋值后数组是否为空
                 alert("没有错误关关键字")
@@ -169,28 +167,11 @@
             }
         }
         const handleBlur=(sele)=>{
-            console.log("handlerBlur",sele)
-            // console.log("sele",sele)
-            // exceptionList.value = refs.exception
-            // data.options = exceptionList.value
-              if (sele) {
-                const resEle = exceptionList.value[sele-1]
-                resEle.scrollIntoView()
-                currentException.value = sele  //当前位置
-                if(currentException.value  >= exceptionList.value.length){
-                    up_scrollTo_down.value = true
-                }else if(currentException.value <= 1){
-                    up_scrollTo.value = true
-                }else{
-                    up_scrollTo.value=false
-                    up_scrollTo_down.value=false   //可以点击
-                }
-            }
-
+            exceptionList.value[sele].scrollIntoView()
         }
-      return {
+        return {
         dialogVisible,
-          data,close,openDialog,handleDialogClose,log_flush,scrollTo,up_scrollTo,up_scrollTo_down,handleBlur,exceptionList,currentException,
+          data,close,openDialog,handleDialogClose,log_flush,scrollTo,up_scrollTo,up_scrollTo_down,exceptionList,currentException,handleBlur,
           loading,quanping,All_Quanping,Quanping_Rest,Cat_Trace,dialog_show_detail,guanjianzi
       }
     }
