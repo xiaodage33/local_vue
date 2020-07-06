@@ -92,7 +92,7 @@
 
         const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击
         const up_scrollTo_down = ref(false)
-        watch(() => {data.dialog_info_flag = props.flag });
+        watch(() => {data.dialog_info_flag = props.flag, exceptionList.value = vue.$set(refs.exception),console.log("lll==>",exceptionList.value) });
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag
