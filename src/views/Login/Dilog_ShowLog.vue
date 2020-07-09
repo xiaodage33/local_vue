@@ -17,7 +17,7 @@
                    :disabled="up_scrollTo_down">下一个异常
         </el-button>
         <!--//选择器-->
-        <el-select style="padding-left: 10px;" class="pull-left" v-model="data.sel_id"  @change="handleBlur" clearable
+        <el-select  v-if="data.options"  style="padding-left: 10px;" class="pull-left" v-model="data.sel_id"  @change="handleBlur" clearable
                    placeholder="请选择第几个错误位置" size="mini">
             <el-option
                     v-for="(item,index) in data.options" :key="index"
@@ -90,9 +90,9 @@
         const exceptionList =ref([])
         const currentException =ref("")
 
-        const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击
+        const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击  watch 中：  exceptionList.value = vue.$set(refs.exception),console.log("lll==>",exceptionList.value)
         const up_scrollTo_down = ref(false)
-        watch(() => {data.dialog_info_flag = props.flag, exceptionList.value = vue.$set(refs.exception),console.log("lll==>",exceptionList.value) });
+        watch(() => {data.dialog_info_flag = props.flag });
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag
@@ -135,7 +135,7 @@
             dialog_show_detail.value=true;   //弹出dialog
             }
         const scrollTo=(value)=>{
-
+            // console.log("哈哈==",refs.exception)
             if(exceptionList.value.length === 0) {  //第一次数组就是空 0
                 // console.log("data.exceptionList===",data.exceptionList)
                 exceptionList.value = refs.exception
@@ -156,6 +156,7 @@
                 resEle.scrollIntoView({behavior: "smooth",block:"center"})
                 // refs.messageBox.scrollTop = resEle.offsetTop - resEle.clientHeight*2   //按照像素定位
                 currentException.value = resIndex
+                // console.log("currentException.value===>",currentException.value) //当前的位置
                 // console.log("==data.currentException=",data.currentException)
                 //判断上下按钮是否可点
                 if(currentException.value +1 >= exceptionList.value.length){
@@ -168,8 +169,22 @@
                 }
             }
         }
-        const handleBlur=(sele)=>{
-            exceptionList.value[sele-1].scrollIntoView()
+        const handleBlur=(resEle)=>{
+            const yaoqu = exceptionList.value[resEle-1]
+            // console.log("yaoqu",yaoqu)
+            yaoqu.scrollIntoView()
+            // exceptionList.value[resEle-1].scrollIntoView()
+            currentException.value = resEle-1
+            // console.log("options里面",currentException.value)
+            if(currentException.value + 1  >= exceptionList.value.length){
+                    up_scrollTo_down.value = true
+                // console.log("dayu吗 ",exceptionList.value.length)
+                }else if(currentException.value <= 1){
+                    up_scrollTo.value = true
+                }else{
+                    up_scrollTo.value=false
+                    up_scrollTo_down.value=false
+                }
         }
         return {
         dialogVisible,
