@@ -144,7 +144,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
         const {username = ''} = tableData;
 
         if (username) { //如果查到了把内容塞给tempItems 重新计算长度展示
-            let data = stripscript(username)   //过滤
+            let data = stripscipt(username)   //过滤
             // console.log(data)   //过滤特殊字符如 空格 等
             tempItems = item.filter(i=>i.pod.indexOf(data)>-1);   //在input输入值后进入删选查找
             // tempItems = item.filter(i=>i.pod.indexOf(username)>-1);   //在input输入值后进入删选查找

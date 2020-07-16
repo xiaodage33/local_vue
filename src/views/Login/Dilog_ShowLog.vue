@@ -1,7 +1,7 @@
 <template>
 <div>
     <!--<el-button type="text" @click="dialogVisible">点击打开 Dialog</el-button>-->
-    <el-dialog class="el-dialog__headerbtn" btn-vvue
+    <el-dialog class="el-dialog__headerbtn"
                :fullscreen="true"
                :visible.sync="data.dialog_info_flag"
                width="60%"
@@ -86,10 +86,8 @@
         const dialog_show_detail = ref(false)  //弹框传值
         // const infoPod = ref("")   //错误的pod名字
         const guanjianzi = ref("")   //关键字数据
-
         const exceptionList =ref([])
         const currentException =ref("")
-
         const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击  watch 中：  exceptionList.value = vue.$set(refs.exception),console.log("lll==>",exceptionList.value)
         const up_scrollTo_down = ref(false)
         watch(() => {data.dialog_info_flag = props.flag });
@@ -101,7 +99,6 @@
         }
         const openDialog = () => {  //弹开后立即执行查日志
             getLog()
-
         }
         const getLog=()=>{
             let requestData = props.pod
@@ -122,7 +119,6 @@
             loading.value=true
             getLog()
             scrollTo()
-
         }
         const All_Quanping=()=>{
             quanping.value= false  //全屏
