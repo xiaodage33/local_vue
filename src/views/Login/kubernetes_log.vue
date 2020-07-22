@@ -74,7 +74,7 @@
 </div>
 </template>
 <script>
-import {reactive, ref, isRef, toRefs, onMounted} from '@vue/composition-api';
+import {reactive, ref, isRef, toRefs, onMounted,onBeforeMount} from '@vue/composition-api';
 import { k8slog,LogInfo,getError,getError_file } from "../../api/getinfo";
 import { stripscript,validatePass } from "../../utils/validate";
 
@@ -89,6 +89,17 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
             }
         },
     setup(props,{root}) {
+
+      onBeforeMount(()=>{
+          console.log(123)
+          timer.value = setInterval(()=>{
+              timer.value ++;
+              errorNumLogfile()
+              console.log(timer.value)
+          },5000);
+      })
+
+        const timer = ref(null)
         const tableData = reactive({
             item: [],
             username:'',
@@ -138,11 +149,8 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
         // console.log('tableChange - page', page);
         const {item = []} = tableData;
         // console.log("测试",tableData)  //显示总条数，当前分页数量
-
         let tempItems = item;   //所有页面列表条数
-
         const {username = ''} = tableData;
-
         if (username) { //如果查到了把内容塞给tempItems 重新计算长度展示
             let data = stripscipt(username)   //过滤
             // console.log(data)   //过滤特殊字符如 空格 等
