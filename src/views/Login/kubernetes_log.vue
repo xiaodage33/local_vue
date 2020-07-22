@@ -91,11 +91,9 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
     setup(props,{root}) {
 
       onBeforeMount(()=>{
-          console.log(123)
           timer.value = setInterval(()=>{
               timer.value ++;
               errorNumLogfile()
-              console.log(timer.value)
           },5000);
       })
 
