@@ -27,6 +27,11 @@ const routes = [
         component: () => import('../views/Login/kubernetes_log.vue')
     },
     {
+        path: '/test_error',
+        name: 'search_error_test',
+        component: () => import('../views/Login/search_error_test.vue')
+    },
+    {
         path: '/about',
         name: 'About',
         // route level code-splitting

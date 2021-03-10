@@ -165,6 +165,7 @@
                 }
             }
         }
+        //option 里面的锚点调转
         const handleBlur=(resEle)=>{
             const yaoqu = exceptionList.value[resEle-1]
             // console.log("yaoqu",yaoqu)

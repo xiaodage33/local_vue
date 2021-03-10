@@ -1,7 +1,5 @@
 <template>
     <div >
-        <!--<div :id="tableData.item" v-for="(key,value) in tableData.item ">-->
-               <!--</div>-->
         <el-badge :value="data.data_num"
                   class="pull-left"
                   type="primary">
@@ -188,7 +186,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
         }
         //慢速的点击报错到弹窗
         const errorNumLog=()=>{
-            openFullScreen()
+            openFullScreen()  //全屏黑
             // console.log("jinlai")
             getError().then(response=>{
                 data.data_num = response.data.data_num

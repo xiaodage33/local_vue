@@ -13,7 +13,7 @@
             :before-close="handleDialogClose"  >
 
         <el-button class="pull-right" type="primary" @click="all_quanping" style="font-size: 5px" size="mini">全屏</el-button>
-                <el-button class="pull-right" type="primary" @click="quanpingrest" style="font-size: 5px;"  size="mini">还原全屏</el-button>
+        <el-button class="pull-right" type="primary" @click="quanpingrest" style="font-size: 5px;"  size="mini">还原全屏</el-button>
 
         <!--<div class="pod-content-box">-->
             <!--<div class="pod-content-item" v-for="(item,index) of data.trace_info "  :key="index">-->

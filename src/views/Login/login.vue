@@ -153,7 +153,7 @@
                 console.log('3',data);
                 handleTableChange();
                 call()
-            }).catch(error =>{
+            }).catch((error) =>{
                 loadingData.value = false
             })
         };
@@ -297,7 +297,9 @@
             // getInfoCategory,
             // getInfoCategoryAll
 
-    }}}
+    }
+        }
+    }
 </script>
 <style scoped>
 </style>
