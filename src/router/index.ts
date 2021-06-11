@@ -20,6 +20,8 @@ Vue.use(VueRouter)
     name: 'Add',
     component: () => import('../views/Add/Add.vue')
   },
+      //下面是k8s
+
    {
     path: '/trae',
     name: 'Trae',
@@ -34,6 +36,11 @@ Vue.use(VueRouter)
     path: '/test_error',
     name: 'search_error_test',
     component: () => import('../views/Login/search_error_test.vue')
+  },
+   {
+    path: '/bawangzhan',
+    name: 'bawangzhan',
+    component: () => import('../views/bawangzhan.vue')
   },
 
   {

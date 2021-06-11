@@ -51,7 +51,7 @@
 </div>
 </template>
 <script>
-    import { reactive, ref, watch,toRefs} from '@vue/composition-api';
+    import { reactive, ref, watchEffect,toRefs} from '@vue/composition-api';
     import { LogInfo } from "../../api/getinfo";
     import  Dilog_ShowTrace  from "./Dilog_ShowTrace";
 
@@ -90,7 +90,7 @@
         const currentException =ref("")
         const up_scrollTo = ref(false)   //是否可以点击false是可以点击 true不可以点击  watch 中：  exceptionList.value = vue.$set(refs.exception),console.log("lll==>",exceptionList.value)
         const up_scrollTo_down = ref(false)
-        watch(() => {data.dialog_info_flag = props.flag });
+        watchEffect(() => {data.dialog_info_flag = props.flag });
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag

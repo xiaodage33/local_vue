@@ -75,7 +75,7 @@
     </el-dialog>
 </template>
 <script>
-    import { reactive, ref, watch } from '@vue/composition-api';
+    import { reactive, ref, watchEffect } from '@vue/composition-api';
     import { getTraceId } from "../../api/getinfo";
     import moment from 'moment'//导入文件
       import {formatDate} from '../../utils/formattime'
@@ -102,7 +102,7 @@
         const quanping = ref(false)
 
 
-        watch(() => {data.dialog_info_flag = props.flag   });
+        watchEffect(() => {data.dialog_info_flag = props.flag   });
         const close = () => {
             data.dialog_info_flag=false;
             emit("update:flag", false);   //emit更新prop flag

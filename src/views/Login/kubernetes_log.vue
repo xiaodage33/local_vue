@@ -45,7 +45,7 @@
                 <template slot-scope="scope">
                     <el-popconfirm
                       title="你还没有权限？">
-                        <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" >删除</el-button>
+                        <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" :loading="true" >删除</el-button>
                         <el-button type="success" size="mini"  @click='editInfo(scope.row.id)' slot="reference" :loading="true">编辑</el-button>
                         <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Log(scope.row.pod) slot="reference" >查看日志</el-button>
                          <!--scope.row.pod 可以这么传pod名字-->
@@ -72,9 +72,11 @@
 </div>
 </template>
 <script>
-import {reactive, ref, isRef, toRefs, onMounted,onBeforeMount} from '@vue/composition-api';
+import {reactive, ref, onMounted,onBeforeMount} from '@vue/composition-api';
 import { k8slog,LogInfo,getError,getError_file } from "../../api/getinfo";
-import { stripscript,validatePass } from "../../utils/validate";
+// import { verifyResult,validatePass } from "../../utils/validate";
+
+// import { validatePass } from "../../utils/validate";
 
 import Dilog_ShowLog from "./Dilog_ShowLog.vue";
     export default {
@@ -138,9 +140,12 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
                 handleTableChange()
                 anniuwait_2.value = false
                 // console.log("pod", tableData.item)
-            }).cache(error => {
             })
+            //     .cache(error => {
+            // })
         }
+
+        //分页
         const handleTableChange = ()=>{
         // console.log('tableChange - page', page);
         const {item = []} = tableData;
@@ -148,7 +153,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
         let tempItems = item;   //所有页面列表条数
         const {username = ''} = tableData;
         if (username) { //如果查到了把内容塞给tempItems 重新计算长度展示
-            let data = stripscipt(username)   //过滤
+            let data = verifyResult(username)   //过滤
             // console.log(data)   //过滤特殊字符如 空格 等
             tempItems = item.filter(i=>i.pod.indexOf(data)>-1);   //在input输入值后进入删选查找
             // tempItems = item.filter(i=>i.pod.indexOf(username)>-1);   //在input输入值后进入删选查找
@@ -182,6 +187,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
                 data.data_podname = response.data.data_podname
                  anniuwait_1.value=false
             }).catch(error=>{
+                console.log("error=>",error)
             })
         }
         //慢速的点击报错到弹窗
@@ -197,12 +203,50 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
             }).cache(error =>{
             })
         }
+
+        //删除按钮
+          const del_message=((id)=>{
+            let data =id
+            root.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            }).then(() => {
+                delinfo({id:data}).then(response=>{
+                console.log("前端删除返回response",response)
+            },
+            root.$message({
+                type: 'success',
+                message: '删除成功!'
+              })  )
+            }).catch(() => {
+              root.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+      })
+
+
+        // 提示无法导入
+
+       const verifyResult=(str)=> {
+            var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）&;—|{ }【】‘；：”“'。，、？]")
+            var rs = "";
+            for (var i = 0; i < str.length; i++) {
+                rs = rs + str.substr(i, 1).replace(pattern, '');
+            }
+            return rs;
+        }
+
+
+
         // 打开页面自动刷现有报错从文件查
        onMounted(() => {
             errorNumLogfile()
       })
 
-        const openFullScreen=()=>{     //刷新等待
+        const openFullScreen=()=>{     //主页面刷新等待
         const loading = root.$loading({
           lock: true,
           text: 'Loading',
@@ -218,8 +262,7 @@ import Dilog_ShowLog from "./Dilog_ShowLog.vue";
             k8slog_b,
             total,
             paginationPageSizes,handleSizeChange,handleCurrentChange,handleTableChange,
-            Cat_Log,
-            dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading,errorNumLogfile,anniuwait_1,anniuwait_2,
+            Cat_Log,del_message,dialog_info_add,infoPod,loading,errorNumLog,data,fullscreenLoading,errorNumLogfile,anniuwait_1,anniuwait_2,
         }
     }
 }

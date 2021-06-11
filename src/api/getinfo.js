@@ -7,7 +7,7 @@ export function Getinfo_Stu(data){
         data,
     })
 }
-//一个单独接口sousuo
+//一个单独接口sousuo 搜索
 export function Getinfo1(data){
     return service.request({
         method:"post",
@@ -72,7 +72,7 @@ export function getError(data){
 export function getError_file(data){
     return service.request({
         method:"get",
-        url:"/__api__/k8s/eroorlogfile",   //显示pod错误数量和名字在文件中查询不是实时那么慢
+        url:"/__api__/k8s/errorlogfile",   //显示pod错误数量和名字在文件中查询不是实时那么慢
         data,
     })
 }

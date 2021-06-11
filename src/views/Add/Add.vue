@@ -31,7 +31,7 @@
 </template>
 <script>
 import {Getinfo,Getinfo1,addinfo,delinfo,editinfo} from '../../api/getinfo'
-import { reactive, ref, watch } from '@vue/composition-api';
+import { reactive, ref, watchEffect } from '@vue/composition-api';
 // import { editInfo } from './login'
 
 export default {
@@ -82,7 +82,7 @@ export default {
             submitLoading: false
         });
         // watch
-        watch(() => data.dialog_info_flag = props.flag);
+        watchEffect(() => data.dialog_info_flag = props.flag);
         /**
          * vue2.0 methods
          */

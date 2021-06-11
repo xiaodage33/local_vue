@@ -1,6 +1,6 @@
 
 
-export function stripscript(str) {
+export function verifyResult(str) {
     var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）&;—|{ }【】‘；：”“'。，、？]")
     var rs = "";
     for (var i = 0; i < str.length; i++) {
