@@ -22,7 +22,10 @@
 
         <el-input v-model="tableData.username" id="username" placeholder="输入查找的pod名字 关键字" type="mini"></el-input>
         <el-button type="primary" @click="k8slog_b" :loading="anniuwait_2"> 查询</el-button>&nbsp;
-                <router-link to="trae">查看ingress | service</router-link>
+                <router-link to="trae" style="margin-right: 10px">查看ingress | service</router-link>
+                <router-link to="zhangok" style="margin-right: 10px; color: #1415ef">  签章日志正确输出</router-link>
+                <router-link to="zhangerror" style="margin-right: 10px; color: #2c2bef">  签章日志错误输出</router-link>
+
         <el-table
             :data="tableData.currentItems"
              style="width: 100%;border: 5px;"

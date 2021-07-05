@@ -12,6 +12,16 @@ const routes = [
         component: () => import('../views/Login/login.vue')
     },
     {
+        path: '/zhangok',
+        name: 'zhongjinok',
+        component: () => import('../views/zhanglog/zhangok.vue')
+    },
+    {
+        path: '/zhangerror',
+        name: 'zhongjinerror',
+        component: () => import('../views/zhanglog/zhangerror.vue')
+    },
+    {
         path: '/add',
         name: 'Add',
         component: () => import('../views/Add/Add.vue')

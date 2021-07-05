@@ -83,3 +83,36 @@ export function getTraceId(data){
         data,
     })
 }
+
+//中金日志系统
+export function getZjok(data) {
+    return service.request({
+        method: "get",
+        url: "__api__/k8s/zhongjin1",
+        data,
+    })
+}
+//获取中金 签章证书日志
+
+export function getZjerror(data) {
+    return service.request({
+        method: "get",
+        url: "__api__/k8s/zhongjinerror",
+        data,
+    })
+}
+
+export function getCatalina(data) {
+    return service.request({
+        method: "get",
+        url: "__api__/k8s/catcatalina",
+        data,
+    })
+}
+export function serviceSystemLog(data) {
+    return service.request({
+        method: "get",
+        url: "__api__/k8s/serviceSystemLog",
+        data,
+    })
+}
